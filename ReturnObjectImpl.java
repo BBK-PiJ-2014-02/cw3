@@ -11,34 +11,32 @@ public class ReturnObjectImpl implements ReturnObject {
 	private final ErrorMessage error;
 
 	/**
-	 * The Object being to be wrapped
+	 * The wrapped Object response.
 	 */
 	private final Object obj;
 
-
     /**
-     * Constructor requiring the Object to passed in
-     * to then be wrapped with the ReturnObjectImpl.
-     * @param obj the object to the wrapped
+     * Constructor for when there is no error.
+     * The NO_ERROR is initialized automatically.
      */
     public ReturnObjectImpl(Object obj) {
-		this.error = ErrorMessage.NO_ERROR;
 		this.obj   = obj;
+		this.error = ErrorMessage.NO_ERROR;
 	}
 
     /**
-     * Constructor for when an error is to be passed.
-     * When in error, no need to assign any Object
-     * @param ErrorMessage
+     * Constructor for when there is an error.
+     * Assign only the error message since the Object won't be needed.
      */
-    public ReturnObjectImpl(ErrorMessage error) {
-		this.error = error;
+    public ReturnObjectImpl(ErrorMessage em) {
 		this.obj   = null;
+		this.error = em;
 	}
 
 	/**
-	 * Returns whether there has been an error
-	 * @return whether there has been an error
+	 * Returns whether there has been an error.
+	 *
+	 * @return true of false whether there has been an error
 	 */
 	public boolean hasError() {
 		if ( error.equals(ErrorMessage.NO_ERROR) ) {
@@ -55,7 +53,7 @@ public class ReturnObjectImpl implements ReturnObject {
 	 * This method must return NO_ERROR if and only if
 	 * {@hasError} returns false.
 	 *
-	 * @return the error message
+	 * @return an ErrorMessage type of error.
 	 */
 	public ErrorMessage getError() {
 		if ( hasError() ) {

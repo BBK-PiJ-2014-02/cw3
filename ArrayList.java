@@ -20,52 +20,59 @@
  * @author Vasco Horta
  */
 public class ArrayList implements List {
+    /**
+     * Array initial size.
+     */
+    private final int INITIAL_ARRAY_SIZE = 10;
+
+    /**
+     * Percentage of increase for the array whenever required to expand it.
+     */
+    private final int ARRAY_INCREASE_PERCENTAGE = 10;
+
 	/**
 	 * The array list
 	 */
 	private Object[] array;
 
     /**
+     * The amount of elements in the array
+     */
+    private int size;
+
+    /**
      * The constructor
      *
-     * Initializes the array
+     * Initializes the array, and sets the size to zero elements.
      */
     public ArrayList() {
-		this.array = new Object[1];
+		this.array = new Object[INITIAL_ARRAY_SIZE];
+		this.size  = 0;
 	}
 
 	/**
 	 * Returns true if the list is empty, false otherwise.
 	 *
-	 * @return true if the list is empty, false otherwise.
+	 * @return true or false if the list is empty or not.
 	 */
 	public boolean isEmpty() {
-        for( int i = 0; i < this.array.length; i++ ) {
-			if ( this.array[i] != null ) {
-				return false;
-			}
+		if ( this.size > 0 ) {
+			return false;
 		}
-
 		return true;
     }
 
 	/**
-	 * Returns the number of items currently in the list.
+	 * The number of elements in the list.
 	 *
-	 * @return the number of items currently in the list
+	 * @return the number of elements in the list
 	 */
 	public int size() {
-		int numberOfItemsInList = 0;
-		for( int i = 0; i < this.array.length; i++ ) {
-			if ( this.array[i] != null ) {
-				numberOfItemsInList++;
-			}
-		}
-		return numberOfItemsInList;
+		return this.size;
 	}
 
 	/**
-	 * Returns the elements at the given position.
+	 * Returns the element at the given position.
 	 *
 	 * If the index is negative or greater or equal than the size of
 	 * the list, then an appropriate error must be returned.
@@ -75,17 +82,16 @@ public class ArrayList implements List {
 	 *         encapsulated in a ReturnObject
 	 */
 	public ReturnObject get(int index) {
-		if ( index < 0 ) {
-			return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+		ReturnObject ro = checkIndex(index);
+		if ( !ro.hasError() ) {
+   			ro = new ReturnObjectImpl(this.array[index]);
 		}
-		else {
-			return new ReturnObjectImpl(this.array[index]);
-		}
+		return ro;
     }
 
 	/**
 	 * Returns the elements at the given position and removes it
-	 * from the list. The indeces of elements after the removed
+	 * from the list. The indexes of elements after the removed
 	 * element must be updated accordignly.
 	 *
 	 * If the index is negative or greater or equal than the size of
@@ -96,7 +102,24 @@ public class ArrayList implements List {
 	 *         encapsulated in a ReturnObject
 	 */
 	public ReturnObject remove(int index) {
-		return new ReturnObjectImpl(array);
+        // Check if the index is valid
+		ReturnObject ro = checkIndex(index);
+
+        // No error, means valid index
+		if ( !ro.hasError() ) {
+
+            // Retrieve the element into a prepared response
+            ro = new ReturnObjectImpl(this.array[index]);
+
+	    	// Remove the element on given index moving all elements
+	    	// on given index and subsequent, one index down.
+	        shiftDown(index);
+
+	        // Number of elements decreases
+	        this.size--;
+
+		}
+		return ro;
 	}
 
 	/**
@@ -118,8 +141,36 @@ public class ArrayList implements List {
 	 *         the item added or containing an appropriate error message
 	 */
 	public ReturnObject add(int index, Object item) {
-		return new ReturnObjectImpl(array);
-	}
+        // Check if the index is valid
+		ReturnObject ro = checkIndex(index);
+
+        // No error, means valid index
+		if ( !ro.hasError() ) {
+
+			// Check if the item is not null. Null is not allowed
+            if ( item == null ) {
+                ro = new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+	    	}
+
+	    	// Add the element on given index, but first, moving all elements
+	    	// on given index and subsequent, one index up.
+	    	else {
+
+				// Shift all elements one index up
+		        shiftUp(index);
+
+		        // Add the item into the respective indext
+		        this.array[index] = item;
+
+		        // Number of elements increases
+		        this.size++;
+
+		        // Prepare the response
+		        ro = new ReturnObjectImpl(item);
+			}
+		}
+		return ro;
+    }
 
 	/**
 	 * Adds an element at the end of the list.
@@ -133,6 +184,118 @@ public class ArrayList implements List {
 	 *         the item added or containing an appropriate error message
 	 */
 	public ReturnObject add(Object item) {
-		return new ReturnObjectImpl(array);
+		ReturnObject ro;
+
+		// No null objects allowed
+		if ( item == null ) {
+			ro = new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+		}
+
+        // Add the element to the end of the list.
+		else {
+
+		    // Extend the array if needed before adding the new element
+			if ( (this.size + 1) >= this.array.length ) {
+				extendArray();
+			}
+
+            // Assign the element to the last available position
+			this.array[size] = item;
+
+			// Update the element amount in the array
+			this.size++;
+
+			// Prepare the response
+            ro = new ReturnObjectImpl(item);
+		}
+		return ro;
 	}
+
+
+    /**
+     * Returns null if valid or the ReturnObject with the error
+     *
+     * @param index of the array
+     * @return ReturnObject with the error or null if no error
+     */
+    private ReturnObject checkIndex(int index) {
+		ReturnObject ro;
+
+        // Check index out of bounds, i.e.: negative
+		if ( index < 0 ) {
+			ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+		}
+
+		// Check index out of bounds, i.e.: bigger than the array size
+		else if ( index >= this.array.length ) {
+			ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+		}
+
+		// Check index on null structure: inside the array boundaries but not allowed to access
+		else if ( this.array[index] == null ) {
+			ro = new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+		}
+
+		// When all checks pass, the index is valid.
+		else {
+			ro = new ReturnObjectImpl(ErrorMessage.NO_ERROR);
+		}
+
+		return ro;
+    }
+
+    /**
+     * Extending the array to accomodate more elements.
+     * The amount of the extension is calculated by ARRAY_INCREASE_PERCENTAGE.
+     */
+	private void extendArray() {
+		// Current array size
+		int currentSize = this.array.length;
+
+		// Percentage to add to current size
+		int addingSize  = ( currentSize * ARRAY_INCREASE_PERCENTAGE / 100 );
+
+        // The array's new size
+		int newSize     = currentSize + addingSize;
+
+        // Create the new Object array with the new size
+		Object[] copy = new Object[newSize];
+
+        // Copy all elements from the old array to the new
+		for(int i = 0; i < array.length; i++) {
+			copy[i] = array[i];
+		}
+
+        // Lose the old and assign the new to this.array
+		this.array = copy;
+    }
+
+    /**
+     * Shift all elements one index up starting from the given index
+     */
+    private void shiftUp(int index) {
+
+		// Make sure there is still enough space in the array to add more elements.
+        if ( this.array.length < this.size + (this.array.length * ARRAY_INCREASE_PERCENTAGE / 100) ) {
+			extendArray();
+		}
+
+		// Move all subsequent elements of index, including index, one index up.
+		for( int i = this.array.length-1; i > index; i-- ) {
+			this.array[i] = this.array[i-1];
+		}
+	}
+
+    /**
+     * Shift all elements one index down starting from the given index+1
+     */
+    private void shiftDown(int index) {
+
+		// Move all subsequent elements of index, one index down,
+		// overriding the element on the index position.
+		for( int i = index; i < this.array.length-1; i++ ) {
+			this.array[i] = this.array[i+1];
+		}
+	}
+
 }
