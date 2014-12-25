@@ -22,7 +22,7 @@ public class Test {
         testArrayList   ("ArrayList 02b",list,false,2);
         testReturnObject("ArrayList 03",list.add(0,"Insert new at zero"), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
         testArrayList   ("ArrayList 03b",list,false,3);
-        testReturnObject("ArrayList 04",list.add(10,"Invalid position"), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testReturnObject("ArrayList 04",list.add(1000000000,"Invalid position"), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
         testArrayList   ("ArrayList 04b",list,false,3);
         testReturnObject("ArrayList 05",list.add("Element to remove"),"Element to remove", false, ErrorMessage.NO_ERROR);
         testArrayList   ("ArrayList 05b",list,false,4);
@@ -67,6 +67,24 @@ public class Test {
         testReturnObject("ArrayList 23",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
         testArrayList   ("ArrayList 23b",list,true,0);
 
+        long startTime = System.currentTimeMillis();
+        list.add(1);
+        for(int i = 0; i < 200; i++ ) {
+			ReturnObject ro = list.add("sg");
+//            long endTime = System.currentTimeMillis();
+//            System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms" + " size:"+list.size()+" ro: "+ro.getError());
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms");
+        startTime = System.currentTimeMillis();
+
+        for(; list.size() > 0;) {
+			ReturnObject ro = list.remove(0);
+            endTime = System.currentTimeMillis();
+            System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms" + " size:"+list.size()+" ro: "+ro.getError());
+		}
+		endTime = System.currentTimeMillis();
+		System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms");
 	}
 
 

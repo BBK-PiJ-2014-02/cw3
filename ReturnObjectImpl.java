@@ -30,6 +30,11 @@ public class ReturnObjectImpl implements ReturnObject {
      */
     public ReturnObjectImpl(ErrorMessage em) {
 		this.obj   = null;
+
+		// If no error message is supplied, assume no error
+		if ( em == null ) {
+			em = ErrorMessage.NO_ERROR;
+		}
 		this.error = em;
 	}
 

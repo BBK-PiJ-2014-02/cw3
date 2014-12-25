@@ -25,6 +25,7 @@ public class ArrayList implements List {
      */
     private final int INITIAL_ARRAY_SIZE = 10;
 
+
     /**
      * Percentage of increase for the array whenever required to expand it.
      */
@@ -108,6 +109,11 @@ public class ArrayList implements List {
         // No error, means valid index
 		if ( !ro.hasError() ) {
 
+   		    // Resize down the array if too big before adding the new element
+   			if ( (this.size + ( this.array.length * ARRAY_INCREASE_PERCENTAGE / 100 )) < this.array.length ) {
+   				reduceArray();
+   			}
+
             // Retrieve the element into a prepared response
             ro = new ReturnObjectImpl(this.array[index]);
 
@@ -155,6 +161,11 @@ public class ArrayList implements List {
 	    	// Add the element on given index, but first, moving all elements
 	    	// on given index and subsequent, one index up.
 	    	else {
+
+    		    // Extend the array if needed before adding the new element
+    			if ( (this.size + 1) >= this.array.length ) {
+    				extendArray();
+    			}
 
 				// Shift all elements one index up
 		        shiftUp(index);
@@ -263,6 +274,32 @@ public class ArrayList implements List {
 
         // Copy all elements from the old array to the new
 		for(int i = 0; i < array.length; i++) {
+			copy[i] = array[i];
+		}
+
+        // Lose the old and assign the new to this.array
+		this.array = copy;
+    }
+
+    /**
+     * Reduce the array size to speed up operations.
+     * The amount of the extension to be cut is calculated by ARRAY_INCREASE_PERCENTAGE.
+     */
+	private void reduceArray() {
+		// Current array size
+		int currentSize = this.array.length;
+
+		// Percentage to cut to current size
+		int reducingSize  = ( currentSize * ARRAY_INCREASE_PERCENTAGE / 100 );
+
+        // The array's new size
+		int newSize     = currentSize - reducingSize;
+
+        // Create the new Object array with the new size
+		Object[] copy = new Object[newSize+1];
+
+        // Copy all elements from the old array to the new
+		for(int i = 0; i < copy.length; i++) {
 			copy[i] = array[i];
 		}
 
