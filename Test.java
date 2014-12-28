@@ -1,7 +1,10 @@
 public class Test {
     public static void main( String[] args ) {
+		// Testing SampleableList
+		testLists("SampleableList", new SampleableListImpl());
+
 		// Testing the FunctionalLinkedList Implementation
-		testLists("FunctionalArrayList", new FunctionalLinkedList());
+		testLists("FunctionalLinkedList", new FunctionalLinkedList());
 
 		// Testing the FunctionalArrayList Implementation
 		testLists("FunctionalArrayList", new FunctionalArrayList());
@@ -23,6 +26,45 @@ public class Test {
         testReturnObject("ReturnObject 07",new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE),    null,  true, ErrorMessage.EMPTY_STRUCTURE);
         testReturnObject("ReturnObject 08",new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS),null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
         testReturnObject("ReturnObject 09",new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT),   null,  true, ErrorMessage.INVALID_ARGUMENT);
+	}
+
+    /**
+     * Test run multiple the SampleableList calls
+     *
+     * @param testName string for the test name
+     * @param sampleList the SampleableList type implementation chosen
+     */
+    private static void testLists(String testName, SampleableList sampleList) {
+        // Add several items to the list
+        testReturnObject(testName + " 01", sampleList.add("First element"), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 02", sampleList,false,1);
+        testReturnObject(testName + " 03", sampleList.add("Second element"), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 04", sampleList,false,2);
+        testReturnObject(testName + " 05", sampleList.add("Third element"), "Third element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 06", sampleList,false,3);
+        testReturnObject(testName + " 07", sampleList.add("Fourth element"), "Fourth element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 08", sampleList,false,4);
+        testReturnObject(testName + " 09", sampleList.add("Fifth element"), "Fifth element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 10", sampleList,false,5);
+        testReturnObject(testName + " 11", sampleList.add("Sixth element"), "Sixth element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 12", sampleList,false,6);
+        testReturnObject(testName + " 12", sampleList.add("Seventh element"), "Seventh element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 13", sampleList,false,7);
+        testReturnObject(testName + " 14", sampleList.add("Eighth element"), "Eighth element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 15", sampleList,false,8);
+        testReturnObject(testName + " 16", sampleList.add("Nineth element"), "Nineth element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 17", sampleList,false,9);
+        testReturnObject(testName + " 18", sampleList.add("Tenth element"), "Tenth element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 19", sampleList,false,10);
+
+        // Check sampled list
+        SampleableList sl = sampleList.sample();
+        testArrayList   (testName + " 20", sl,false,5);
+        testReturnObject(testName + " 21", sl.get(0), "First element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 22", sl.get(1), "Third element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 23", sl.get(2), "Fifth element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 24", sl.get(3), "Seventh element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 25", sl.get(4), "Nineth element",  false, ErrorMessage.NO_ERROR);
 	}
 
     /**
