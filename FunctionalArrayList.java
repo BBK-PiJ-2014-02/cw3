@@ -13,7 +13,7 @@
  *
  * @author PiJ
  */
-public interface FunctionalList extends List {
+public class FunctionalArrayList extends ArrayList implements FunctionalList {
     /**
      * Returns the element at the beginning of the list.
      *
@@ -22,7 +22,18 @@ public interface FunctionalList extends List {
      * @return a copy of the element at the beginning of the list or
      *         an error if the list is empty.
      */
-    public ReturnObject head();
+    public ReturnObject head() {
+		ReturnObject ro;
+
+		if ( isEmpty() ) {
+			ro = new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+		}
+		else {
+			ro = get(0);
+		}
+
+		return ro;
+	}
 
     /**
      * Returns a list with the elements in this list except the
@@ -31,5 +42,17 @@ public interface FunctionalList extends List {
      *
      * If the list is empty, another empty list is returned.
      */
-    public FunctionalList rest();
+    public FunctionalList rest() {
+		// Get a new instance of FunctionalArrayList
+		FunctionalList fl = new FunctionalArrayList();
+
+		// Copy all elements to the new FunctionalArrayList without the head
+		for ( int i = 1; i < size(); i++ ) {
+			ReturnObject ro = get(i);
+			fl.add(ro.getReturnValue());
+    	}
+
+    	// Return the newly created FunctionalList without the head.
+    	return fl;
+	}
 }

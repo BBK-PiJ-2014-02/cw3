@@ -25,7 +25,6 @@ public class ArrayList implements List {
      */
     private final int INITIAL_ARRAY_SIZE = 10;
 
-
     /**
      * Percentage of increase for the array whenever required to expand it.
      */
@@ -85,7 +84,12 @@ public class ArrayList implements List {
 	public ReturnObject get(int index) {
 		ReturnObject ro = checkIndex(index);
 		if ( !ro.hasError() ) {
-   			ro = new ReturnObjectImpl(this.array[index]);
+			if ( this.array[index] != null ) {
+       			ro = new ReturnObjectImpl(this.array[index]);
+			}
+			else {
+				ro = new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+			}
 		}
 		return ro;
     }
@@ -334,5 +338,4 @@ public class ArrayList implements List {
 			this.array[i] = this.array[i+1];
 		}
 	}
-
 }

@@ -1,12 +1,14 @@
 public class Test {
     public static void main( String[] args ) {
+		// Testing the FunctionalArrayList Implementation
+		FunctionalList functionalList = new FunctionalArrayList();
+		testLists("FunctionalArrayList", functionalList);
+
 		// Testing the LinkedList Implementation
-		List list = new LinkedList();
-		testLists("LinkedList", list);
+		testLists("LinkedList", new LinkedList());
 
         // Testing the ArrayList Implementation of List
-        list = new ArrayList();
-        testLists("ArrayList", list);
+        testLists("ArrayList", new ArrayList());
 
         // Testing ReturnObject Implementation
         // testReturnObject(ReturnObject ro, returnValueExpected, hasErrorExpected, errorMessageExpected)
@@ -22,11 +24,48 @@ public class Test {
 	}
 
     /**
+     * Test run multiple the FunctionalArrayList calls
+     *
+     * @param testName string for the test name
+     * @param functionalList the FunctionalList type implementation chosen
+     */
+    private static void testLists(String testName, FunctionalList functionalList) {
+		// Test empty list
+        testReturnObject(testName + " 00", functionalList.head(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+
+        // Test new additions to the list
+        testReturnObject(testName + " 01", functionalList.add("First element"), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 01b",functionalList,false,1);
+
+        // Test head
+        testReturnObject(testName + " 02", functionalList.head(), "First element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 03", functionalList.add("Second element"),"Second element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 04", functionalList.add("Third element"),"Third element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 05", functionalList.head(), "First element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 06", functionalList.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 07", functionalList,false,2);
+        testReturnObject(testName + " 08", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
+
+        // Test rest
+        FunctionalList shortList = functionalList.rest();
+        testArrayList   (testName + " 07", shortList,false,1);
+        testReturnObject(testName + " 08", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 09", shortList.head(), "Third element",  false, ErrorMessage.NO_ERROR);
+
+        // Test adding elements to short list and checking FunctionalArrayList does not change
+        testReturnObject(testName + " 10", shortList.add("ShortList element"), "ShortList element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 11", shortList,false,2);
+        testReturnObject(testName + " 12", shortList.remove(0), "Third element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 13", shortList,false,1);
+        testReturnObject(testName + " 14", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 15", shortList.head(), "ShortList element",  false, ErrorMessage.NO_ERROR);
+	}
+
+    /**
      * Test run the ArrayList or LinkedList
      *
      * @param testName string for the test name
      * @param list the list type implementation chosen
-     * @param firstGiven is true if first element is given
      */
     private static void testLists(String testName, List list) {
         // testArrayList(testName, list, isEmptyExpected, sizeExpected)
