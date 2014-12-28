@@ -13,7 +13,7 @@
  *
  * @author Vasco Horta
  */
-public class FunctionalArrayList extends ArrayList implements FunctionalList {
+public class FunctionalLinkedList extends LinkedList implements FunctionalList {
     /**
      * Returns the element at the beginning of the list.
      *

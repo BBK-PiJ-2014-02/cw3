@@ -1,8 +1,10 @@
 public class Test {
     public static void main( String[] args ) {
+		// Testing the FunctionalLinkedList Implementation
+		testLists("FunctionalArrayList", new FunctionalLinkedList());
+
 		// Testing the FunctionalArrayList Implementation
-		FunctionalList functionalList = new FunctionalArrayList();
-		testLists("FunctionalArrayList", functionalList);
+		testLists("FunctionalArrayList", new FunctionalArrayList());
 
 		// Testing the LinkedList Implementation
 		testLists("LinkedList", new LinkedList());
