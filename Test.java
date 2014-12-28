@@ -1,9 +1,8 @@
 public class Test {
     public static void main( String[] args ) {
 		// Testing the LinkedList Implementation
-		List list = new LinkedList(2);
+		List list = new LinkedList();
 		testLists("LinkedList", list);
-
 
         // Testing the ArrayList Implementation of List
         list = new ArrayList();
@@ -24,6 +23,10 @@ public class Test {
 
     /**
      * Test run the ArrayList or LinkedList
+     *
+     * @param testName string for the test name
+     * @param list the list type implementation chosen
+     * @param firstGiven is true if first element is given
      */
     private static void testLists(String testName, List list) {
         // testArrayList(testName, list, isEmptyExpected, sizeExpected)
@@ -53,6 +56,7 @@ public class Test {
         testArrayList   (testName + " 11b",list,false,5);
         testReturnObject(testName + " 12",list.get(4), "Last element",  false, ErrorMessage.NO_ERROR);
         testArrayList   (testName + " 12b",list,false,5);
+
         testReturnObject(testName + " 13",list.get(5), null,  true, ErrorMessage.EMPTY_STRUCTURE);
         testArrayList   (testName + " 13b",list,false,5);
 
@@ -78,6 +82,7 @@ public class Test {
         testArrayList   (testName + " 22b",list,false,1);
         testReturnObject(testName + " 23",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
         testArrayList   (testName + " 23b",list,true,0);
+
 	}
 
     /**
@@ -116,6 +121,7 @@ public class Test {
 		Object returnValueFound = ro.getReturnValue();
 		boolean hasErrorFound   = ro.hasError();
 		ErrorMessage errorMessageFound = ro.getError();
+		testName = "RO-"+testName;
 
 		if ( returnValueFound == null && returnValueExpected == null ) {
 			// Do nothing
