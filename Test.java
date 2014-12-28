@@ -1,5 +1,14 @@
 public class Test {
     public static void main( String[] args ) {
+		// Testing the LinkedList Implementation
+		List list = new LinkedList(2);
+		testLists("LinkedList", list);
+
+
+        // Testing the ArrayList Implementation of List
+        list = new ArrayList();
+        testLists("ArrayList", list);
+
         // Testing ReturnObject Implementation
         // testReturnObject(ReturnObject ro, returnValueExpected, hasErrorExpected, errorMessageExpected)
         testReturnObject("ReturnObject 01",new ReturnObjectImpl(null),                            null,  false,ErrorMessage.NO_ERROR);
@@ -11,82 +20,65 @@ public class Test {
         testReturnObject("ReturnObject 07",new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE),    null,  true, ErrorMessage.EMPTY_STRUCTURE);
         testReturnObject("ReturnObject 08",new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS),null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
         testReturnObject("ReturnObject 09",new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT),   null,  true, ErrorMessage.INVALID_ARGUMENT);
-
-        // Testing the ArrayList Implementation of List
-        List list = new ArrayList();
-        // testArrayList(testName, list, isEmptyExpected, sizeExpected)
-        testArrayList   ("ArrayList 00b",list,true,0);
-        testReturnObject("ArrayList 01",list.add("First element"), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 01b",list,false,1);
-        testReturnObject("ArrayList 02",list.add("Second element"),"Second element", false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 02b",list,false,2);
-        testReturnObject("ArrayList 03",list.add(0,"Insert new at zero"), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 03b",list,false,3);
-        testReturnObject("ArrayList 04",list.add(1000000000,"Invalid position"), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
-        testArrayList   ("ArrayList 04b",list,false,3);
-        testReturnObject("ArrayList 05",list.add("Element to remove"),"Element to remove", false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 05b",list,false,4);
-        testReturnObject("ArrayList 06",list.add("Last element"),"Last element", false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 06b",list,false,5);
-        testReturnObject("ArrayList 07",list.add(null), null,  true, ErrorMessage.INVALID_ARGUMENT);
-        testArrayList   ("ArrayList 07b",list,false,5);
-
-        testReturnObject("ArrayList 08",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 08b",list,false,5);
-        testReturnObject("ArrayList 09",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 09b",list,false,5);
-        testReturnObject("ArrayList 10",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 10b",list,false,5);
-        testReturnObject("ArrayList 11",list.get(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 11b",list,false,5);
-        testReturnObject("ArrayList 12",list.get(4), "Last element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 12b",list,false,5);
-        testReturnObject("ArrayList 13",list.get(5), null,  true, ErrorMessage.EMPTY_STRUCTURE);
-        testArrayList   ("ArrayList 13b",list,false,5);
-
-        testReturnObject("ArrayList 14",list.remove(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 14b",list,false,4);
-
-        testReturnObject("ArrayList 15",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 15b",list,false,4);
-        testReturnObject("ArrayList 16",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 16b",list,false,4);
-        testReturnObject("ArrayList 17",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 17b",list,false,4);
-        testReturnObject("ArrayList 18",list.get(3), "Last element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 18b",list,false,4);
-        testReturnObject("ArrayList 19",list.get(4), null,  true, ErrorMessage.EMPTY_STRUCTURE);
-        testArrayList   ("ArrayList 19b",list,false,4);
-
-        testReturnObject("ArrayList 20",list.remove(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 20b",list,false,3);
-        testReturnObject("ArrayList 21",list.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 21b",list,false,2);
-        testReturnObject("ArrayList 22",list.remove(0), "Second element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 22b",list,false,1);
-        testReturnObject("ArrayList 23",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   ("ArrayList 23b",list,true,0);
-
-        long startTime = System.currentTimeMillis();
-        list.add(1);
-        for(int i = 0; i < 200; i++ ) {
-			ReturnObject ro = list.add("sg");
-//            long endTime = System.currentTimeMillis();
-//            System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms" + " size:"+list.size()+" ro: "+ro.getError());
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms");
-        startTime = System.currentTimeMillis();
-
-        for(; list.size() > 0;) {
-			ReturnObject ro = list.remove(0);
-            endTime = System.currentTimeMillis();
-            System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms" + " size:"+list.size()+" ro: "+ro.getError());
-		}
-		endTime = System.currentTimeMillis();
-		System.out.println("Start: "+startTime+" Finish: "+endTime+" took: "+(endTime-startTime)+"ms");
 	}
 
+    /**
+     * Test run the ArrayList or LinkedList
+     */
+    private static void testLists(String testName, List list) {
+        // testArrayList(testName, list, isEmptyExpected, sizeExpected)
+        testArrayList   (testName + " 00b",list,true,0);
+        testReturnObject(testName + " 01",list.add("First element"), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 01b",list,false,1);
+        testReturnObject(testName + " 02",list.add("Second element"),"Second element", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 02b",list,false,2);
+        testReturnObject(testName + " 03",list.add(0,"Insert new at zero"), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 03b",list,false,3);
+        testReturnObject(testName + " 04",list.add(1000000000,"Invalid position"), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testArrayList   (testName + " 04b",list,false,3);
+        testReturnObject(testName + " 05",list.add("Element to remove"),"Element to remove", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 05b",list,false,4);
+        testReturnObject(testName + " 06",list.add("Last element"),"Last element", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 06b",list,false,5);
+        testReturnObject(testName + " 07",list.add(null), null,  true, ErrorMessage.INVALID_ARGUMENT);
+        testArrayList   (testName + " 07b",list,false,5);
+
+        testReturnObject(testName + " 08",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 08b",list,false,5);
+        testReturnObject(testName + " 09",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 09b",list,false,5);
+        testReturnObject(testName + " 10",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 10b",list,false,5);
+        testReturnObject(testName + " 11",list.get(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 11b",list,false,5);
+        testReturnObject(testName + " 12",list.get(4), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 12b",list,false,5);
+        testReturnObject(testName + " 13",list.get(5), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testArrayList   (testName + " 13b",list,false,5);
+
+        testReturnObject(testName + " 14",list.remove(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 14b",list,false,4);
+
+        testReturnObject(testName + " 15",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 15b",list,false,4);
+        testReturnObject(testName + " 16",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 16b",list,false,4);
+        testReturnObject(testName + " 17",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 17b",list,false,4);
+        testReturnObject(testName + " 18",list.get(3), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 18b",list,false,4);
+        testReturnObject(testName + " 19",list.get(4), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testArrayList   (testName + " 19b",list,false,4);
+
+        testReturnObject(testName + " 20",list.remove(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 20b",list,false,3);
+        testReturnObject(testName + " 21",list.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 21b",list,false,2);
+        testReturnObject(testName + " 22",list.remove(0), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 22b",list,false,1);
+        testReturnObject(testName + " 23",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 23b",list,true,0);
+	}
 
     /**
      * Unit Testing ArrayList Implementation.
