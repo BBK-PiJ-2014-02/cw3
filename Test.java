@@ -1,5 +1,8 @@
 public class Test {
     public static void main( String[] args ) {
+		// Testing AbstractStack with StackImpl
+		testLists("AbstractStack", new StackImpl(new LinkedList()));
+
 		// Testing SampleableList
 		testLists("SampleableList", new SampleableListImpl());
 
@@ -29,7 +32,48 @@ public class Test {
 	}
 
     /**
-     * Test run multiple the SampleableList calls
+     * Test run multiple StackImpl calls
+     *
+     * @param testName string for the test name
+     * @param stack the AbstractStack type for StackImpl implementation chosen
+     */
+    private static void testLists(String testName, AbstractStack stack) {
+		// Test empty list
+        testReturnObject(testName + " 00", stack.top(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 01", stack,true,0);
+        testReturnObject(testName + " 02", stack.pop(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 03", stack,true,0);
+        stack.push      ("First element");
+        testStack       (testName + " 04", stack,false,1);
+        testReturnObject(testName + " 05", stack.top(), "First element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 06", stack,false,1);
+        testReturnObject(testName + " 07", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 08", stack,true,0);
+        testReturnObject(testName + " 09", stack.pop(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 10", stack,true,0);
+        stack.push      ("First element");
+        testStack       (testName + " 11", stack,false,1);
+        stack.push      ("Second element");
+        testStack       (testName + " 12", stack,false,2);
+        stack.push      ("Third element");
+        testStack       (testName + " 13", stack,false,3);
+        stack.push      ("Fourth element");
+        testStack       (testName + " 14", stack,false,4);
+        testReturnObject(testName + " 15", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 16", stack,false,3);
+        testReturnObject(testName + " 17", stack.pop(), "Second element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 18", stack,false,2);
+        testReturnObject(testName + " 19", stack.pop(), "Third element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 20", stack,false,1);
+        testReturnObject(testName + " 21", stack.pop(), "Fourth element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 22", stack,true,0);
+        testReturnObject(testName + " 23", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 24", stack,true,0);
+	}
+
+
+    /**
+     * Test run multiple SampleableList calls
      *
      * @param testName string for the test name
      * @param sampleList the SampleableList type implementation chosen
@@ -167,6 +211,28 @@ public class Test {
         testArrayList   (testName + " 23b",list,true,0);
 
 	}
+
+    /**
+     * Unit Testing AbstractStack Implementation.
+     * Outputs results only for isEmpty() and size()
+     *
+     * @param testName the test name
+     * @param stack the AbstractStack
+     * @param isEmptyExpected boolean expected stack value for isEmpty()
+     * @param sizeExpected int for the element amount expected in Stack
+     */
+    private static void testStack(String testName, AbstractStack stack, boolean isEmptyExpected, int sizeExpected) {
+		boolean isEmptyFound = stack.isEmpty();
+		int     sizeFound    = stack.size();
+
+		if ( isEmptyFound != isEmptyExpected ) {
+			System.out.println("[" + testName + "]\t - Stack.isEmpty() Found: " + isEmptyFound + " and expected " + isEmptyExpected);
+		}
+
+		if ( sizeFound != sizeExpected ) {
+			System.out.println("[" + testName + "]\t - Stack.size() Found: " + sizeFound + " and expected " + sizeExpected);
+		}
+    }
 
     /**
      * Unit Testing ArrayList Implementation.

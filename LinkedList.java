@@ -98,6 +98,12 @@ public class LinkedList implements List {
     		if ( ro.hasError() ) {
 				return ro;
 			}
+
+			// On first element, no data is stored
+			// Check if list is empty and return appropriate error here
+			if( isEmpty() ) {
+				return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+			}
 		}
 
 		// Index == -1 means that we have the matched index
@@ -138,6 +144,12 @@ public class LinkedList implements List {
     		ro = checkIndex(index);
     		if ( ro.hasError() ) {
 				return ro;
+			}
+
+			// On first element, no data is stored
+			// Check if list is empty and return appropriate error here
+			if( isEmpty() ) {
+				return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
 			}
 		}
 
@@ -188,6 +200,12 @@ public class LinkedList implements List {
     		ro = checkIndex(index);
     		if ( ro.hasError() ) {
 				return ro;
+			}
+
+			// On first element, no data is stored
+			// Check if list is empty and return appropriate error here
+			if( isEmpty() ) {
+				return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
 			}
 		}
 
