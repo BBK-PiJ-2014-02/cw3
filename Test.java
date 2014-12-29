@@ -1,15 +1,29 @@
 public class Test {
     public static void main( String[] args ) {
+		// Test ImprovedStack efficiency
+		ImprovedStack improvedArrayList  = new ImprovedStackImpl(new ArrayList());
+		ImprovedStack improvedLinkedList = new ImprovedStackImpl(new LinkedList());
+
+		System.out.print("\nTesting ArrayList() efficiency:");
+		long start = System.currentTimeMillis();
+		for(int i = 0; i < 100000; i++) improvedArrayList.push(i);
+		for(int i = 0; i < 100000; i++) improvedArrayList.pop();
+		long end = System.currentTimeMillis();
+		System.out.println(" "+(end-start)+"ms");
+
+		System.out.print("Testing LinkedList() efficiency:");
+		start = System.currentTimeMillis();
+		for(int i = 0; i < 100000; i++) improvedLinkedList.push(i);
+		for(int i = 0; i < 100000; i++) improvedLinkedList.pop();
+		end = System.currentTimeMillis();
+		System.out.println(" "+(end-start)+"ms");
+
         // Testing ImprovedStack with the ImprovedStackImpl implementation
         testLists("ImprovedStack", new ImprovedStackImpl(new LinkedList()));
-
-        // Testing ImprovedStack with the ImprovedStackImpl implementation
         testLists("ImprovedStack", new ImprovedStackImpl(new ArrayList()));
 
-        // Testing AbstractStack with StackImpl on a LinkedList
+        // Testing AbstractStack with StackImpl on a LinkedList and ArrayList
         testLists("AbstractStack", new StackImpl(new LinkedList()));
-
-        // Testing AbstractStack with StackImpl on an ArrayList
         testLists("AbstractStack", new StackImpl(new ArrayList()));
 
         // Testing SampleableList
