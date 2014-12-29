@@ -1,7 +1,13 @@
 public class Test {
     public static void main( String[] args ) {
-		// Testing AbstractStack with StackImpl
+		// Testing ImprovedStack with the ImprovedStackImpl implementation
+		testLists("ImprovedStack", new ImprovedStackImpl(new LinkedList()));
+
+		// Testing AbstractStack with StackImpl on a LinkedList
 		testLists("AbstractStack", new StackImpl(new LinkedList()));
+
+		// Testing AbstractStack with StackImpl on an ArrayList
+		testLists("AbstractStack", new StackImpl(new ArrayList()));
 
 		// Testing SampleableList
 		testLists("SampleableList", new SampleableListImpl());
@@ -31,8 +37,102 @@ public class Test {
         testReturnObject("ReturnObject 09",new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT),   null,  true, ErrorMessage.INVALID_ARGUMENT);
 	}
 
+   /**
+     * Test run multiple ImprovedStack ImprovedStackImpl calls
+     *
+     * @param testName string for the test name
+     * @param stack the ImprovedStack type for ImprovedStackImpl implementation chosen
+     */
+    private static void testLists(String testName, ImprovedStack stack) {
+		// Test basic list methods
+        testReturnObject(testName + " 00", stack.top(), null, true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 01", stack,true,0);
+        testReturnObject(testName + " 02", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 03", stack,true,0);
+        stack.push      ("First element");
+        testStack       (testName + " 04", stack,false,1);
+        testReturnObject(testName + " 05", stack.top(), "First element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 06", stack,false,1);
+        testReturnObject(testName + " 07", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 08", stack,true,0);
+        testReturnObject(testName + " 09", stack.pop(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 10", stack,true,0);
+        stack.push      ("First element");
+        testStack       (testName + " 11", stack,false,1);
+        stack.push      ("Second element");
+        testStack       (testName + " 12", stack,false,2);
+        stack.push      ("Third element");
+        testStack       (testName + " 13", stack,false,3);
+        stack.push      ("Fourth element");
+        testStack       (testName + " 14", stack,false,4);
+        testReturnObject(testName + " 15", stack.pop(), "Fourth element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 16", stack,false,3);
+        testReturnObject(testName + " 17", stack.pop(), "Third element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 18", stack,false,2);
+        testReturnObject(testName + " 19", stack.pop(), "Second element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 20", stack,false,1);
+        testReturnObject(testName + " 21", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 22", stack,true,0);
+        testReturnObject(testName + " 23", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 24", stack,true,0);
+
+		// Test the new ImprovedStack methods
+        stack.push      ("First element");
+        testStack       (testName + " 25", stack,false,1);
+        stack.push      (1234.54);
+        stack.push      ("Third element");
+        stack.push      (1234.54);
+        stack.push      (1234.54);
+        stack.push      (1234.54);
+        stack.push      (1234.54);
+        stack.push      (1234.54);
+        stack.push      (1234.54);
+        stack.push      ("Tenth element");
+        testStack       (testName + " 26", stack,false,10);
+        stack.remove    (1234.54);
+        testStack       (testName + " 27", stack,false,3);
+        stack.push      ("Another element");
+        testStack       (testName + " 28", stack,false,4);
+        stack.remove    ("Another element");
+        testStack       (testName + " 29", stack,false,3);
+
+        // Check the remainding items in stack are popped correctly
+        testReturnObject(testName + " 31", stack.pop(), "Tenth element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 32", stack,false,2);
+        testReturnObject(testName + " 33", stack.pop(), "Third element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 34", stack,false,1);
+        testReturnObject(testName + " 35", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testStack       (testName + " 36", stack,true,0);
+
+        // Test the reversed stack
+        stack.push      ("First element");
+        stack.push      ("Second element");
+        stack.push      ("Third element");
+        stack.push      ("Fourth element");
+        testStack       (testName + " 37", stack,false,4);
+        ImprovedStack reversedStack = stack.reverse();
+        testReturnObject(testName + " 38", reversedStack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 39", reversedStack.pop(), "Second element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 40", reversedStack.pop(), "Third element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 41", reversedStack.pop(), "Fourth element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 42", reversedStack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 43", reversedStack,true,0);
+        // Verify original stack was not altered
+        testReturnObject(testName + " 44", stack.pop(), "Fourth element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 45", stack.pop(), "Third element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 46", stack.pop(), "Second element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 47", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 48", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
+        testStack       (testName + " 49", stack,true,0);
+
+
+
+
+	}
+
+
     /**
-     * Test run multiple StackImpl calls
+     * Test  run multiple StackImpl calls
      *
      * @param testName string for the test name
      * @param stack the AbstractStack type for StackImpl implementation chosen
@@ -59,13 +159,13 @@ public class Test {
         testStack       (testName + " 13", stack,false,3);
         stack.push      ("Fourth element");
         testStack       (testName + " 14", stack,false,4);
-        testReturnObject(testName + " 15", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 15", stack.pop(), "Fourth element", false, ErrorMessage.NO_ERROR);
         testStack       (testName + " 16", stack,false,3);
-        testReturnObject(testName + " 17", stack.pop(), "Second element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 17", stack.pop(), "Third element", false, ErrorMessage.NO_ERROR);
         testStack       (testName + " 18", stack,false,2);
-        testReturnObject(testName + " 19", stack.pop(), "Third element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 19", stack.pop(), "Second element", false, ErrorMessage.NO_ERROR);
         testStack       (testName + " 20", stack,false,1);
-        testReturnObject(testName + " 21", stack.pop(), "Fourth element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 21", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
         testStack       (testName + " 22", stack,true,0);
         testReturnObject(testName + " 23", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 24", stack,true,0);
@@ -264,6 +364,28 @@ public class Test {
         testReturnObject(testName + " 91",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
         testArrayList   (testName + " 92",list,true,0);
 	}
+
+    /**
+     * Unit Testing ImprovedStack Implementation.
+     * Outputs results only for isEmpty() and size()
+     *
+     * @param testName the test name
+     * @param stack the ImprovedStack
+     * @param isEmptyExpected boolean expected stack value for isEmpty()
+     * @param sizeExpected int for the element amount expected in Stack
+     */
+    private static void testStack(String testName, ImprovedStack stack, boolean isEmptyExpected, int sizeExpected) {
+		boolean isEmptyFound = stack.isEmpty();
+		int     sizeFound    = stack.size();
+
+		if ( isEmptyFound != isEmptyExpected ) {
+			System.out.println("[" + testName + "]\t - Stack.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
+		}
+
+		if ( sizeFound != sizeExpected ) {
+			System.out.println("[" + testName + "]\t - Stack.size(): " + sizeFound + " expected " + sizeExpected);
+		}
+    }
 
     /**
      * Unit Testing AbstractStack Implementation.

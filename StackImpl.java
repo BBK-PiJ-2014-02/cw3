@@ -49,7 +49,7 @@ public class StackImpl extends AbstractStack implements Stack {
      */
 	public void push(Object item) {
 		// Add item to position 0
-		internalList.add(item);
+		internalList.add(0,item);
 	}
 
     /**

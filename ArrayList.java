@@ -87,7 +87,7 @@ public class ArrayList implements List {
 			if ( this.array[index] != null && index < size ) {
        			ro = new ReturnObjectImpl(this.array[index]);
 			}
-			else if ( index >= size ) {
+			else if ( index >= size && index > 0 ) {
 				ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
 			}
 			else {
@@ -115,6 +115,11 @@ public class ArrayList implements List {
 
         // No error, means valid index
 		if ( !ro.hasError() ) {
+
+			// When trying to remove on empty list
+			if ( isEmpty() ) {
+				return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+			}
 
    		    // Resize down the array if too big before adding the new element
    			if ( (this.size + ( this.array.length * ARRAY_INCREASE_PERCENTAGE / 100 )) < this.array.length ) {
