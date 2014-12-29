@@ -57,14 +57,17 @@ public class ImprovedStackImpl implements ImprovedStack {
 	 * @param object the object to remove
 	 */
 	public void remove(Object object) {
+		// Need to run through all list
 		for(int i = 0; i < list.size(); i++) {
+			// Get the return object for the index i
 			ReturnObject ro = list.get(i);
-			if ( !ro.hasError() ) {
-    			Object item = ro.getReturnValue();
-    			if ( item.equals(object) ){
-					list.remove(i);
-					i--;
-				}
+		    // Extract the object to be compared
+   			Object item = ro.getReturnValue();
+   			// If equals, remove it and redo that same index
+   			// since current i will be occupied with the next item
+   			if ( item.equals(object) ){
+				list.remove(i);
+				i--;
 			}
 		}
 	}
