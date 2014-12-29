@@ -18,56 +18,56 @@ public class StackImpl extends AbstractStack implements Stack {
      *
      * @param list List
      */
-	public StackImpl(List list) {
+    public StackImpl(List list) {
         super(list);
-	}
+    }
 
     /**
      * Pop the last item added and remove it.
      *
      * @return ReturnObject with the last item added.
      */
-	public ReturnObject pop() {
-		ReturnObject ro = internalList.remove(0);
-		return ro;
-	}
+    public ReturnObject pop() {
+        ReturnObject ro = internalList.remove(0);
+        return ro;
+    }
 
     /**
      * Returns the last added item without removing it.
      *
      * @return ReturnObject with last added item.
      */
-	public ReturnObject top() {
-		ReturnObject ro = internalList.get(0);
-		return ro;
-	}
+    public ReturnObject top() {
+        ReturnObject ro = internalList.get(0);
+        return ro;
+    }
 
     /**
      * Push a given item into the List Stack.
      *
      * @param item type Object.
      */
-	public void push(Object item) {
-		// Add item to position 0
-		internalList.add(0,item);
-	}
+    public void push(Object item) {
+        // Add item to position 0
+        internalList.add(0,item);
+    }
 
     /**
      * The size of the List Stack.
      *
      * @return the size of List Stack.
      */
-	public int size() {
-		return internalList.size();
-	}
+    public int size() {
+        return internalList.size();
+    }
 
     /**
      * Check if the List Stack is empty.
      *
      * @return true if empty, false otherwise.
      */
-	public boolean isEmpty() {
-		return internalList.isEmpty();
-	}
+    public boolean isEmpty() {
+        return internalList.isEmpty();
+    }
 }
 

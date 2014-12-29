@@ -1,28 +1,28 @@
 public class Test {
     public static void main( String[] args ) {
-		// Testing ImprovedStack with the ImprovedStackImpl implementation
-		testLists("ImprovedStack", new ImprovedStackImpl(new LinkedList()));
+        // Testing ImprovedStack with the ImprovedStackImpl implementation
+        testLists("ImprovedStack", new ImprovedStackImpl(new LinkedList()));
 
-		// Testing ImprovedStack with the ImprovedStackImpl implementation
-		testLists("ImprovedStack", new ImprovedStackImpl(new ArrayList()));
+        // Testing ImprovedStack with the ImprovedStackImpl implementation
+        testLists("ImprovedStack", new ImprovedStackImpl(new ArrayList()));
 
-		// Testing AbstractStack with StackImpl on a LinkedList
-		testLists("AbstractStack", new StackImpl(new LinkedList()));
+        // Testing AbstractStack with StackImpl on a LinkedList
+        testLists("AbstractStack", new StackImpl(new LinkedList()));
 
-		// Testing AbstractStack with StackImpl on an ArrayList
-		testLists("AbstractStack", new StackImpl(new ArrayList()));
+        // Testing AbstractStack with StackImpl on an ArrayList
+        testLists("AbstractStack", new StackImpl(new ArrayList()));
 
-		// Testing SampleableList
-		testLists("SampleableList", new SampleableListImpl());
+        // Testing SampleableList
+        testLists("SampleableList", new SampleableListImpl());
 
-		// Testing the FunctionalLinkedList Implementation
-		testLists("FunctionalLinkedList", new FunctionalLinkedList());
+        // Testing the FunctionalLinkedList Implementation
+        testLists("FunctionalLinkedList", new FunctionalLinkedList());
 
-		// Testing the FunctionalArrayList Implementation
-		testLists("FunctionalArrayList", new FunctionalArrayList());
+        // Testing the FunctionalArrayList Implementation
+        testLists("FunctionalArrayList", new FunctionalArrayList());
 
-		// Testing the LinkedList Implementation
-		testLists("LinkedList", new LinkedList());
+        // Testing the LinkedList Implementation
+        testLists("LinkedList", new LinkedList());
 
         // Testing the ArrayList Implementation of List
         testLists("ArrayList", new ArrayList());
@@ -38,7 +38,7 @@ public class Test {
         testReturnObject("ReturnObject 07",new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE),    null,  true, ErrorMessage.EMPTY_STRUCTURE);
         testReturnObject("ReturnObject 08",new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS),null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
         testReturnObject("ReturnObject 09",new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT),   null,  true, ErrorMessage.INVALID_ARGUMENT);
-	}
+    }
 
    /**
      * Test run multiple ImprovedStack ImprovedStackImpl calls
@@ -47,7 +47,7 @@ public class Test {
      * @param stack the ImprovedStack type for ImprovedStackImpl implementation chosen
      */
     private static void testLists(String testName, ImprovedStack stack) {
-		// Test basic list methods
+        // Test basic list methods
         testReturnObject(testName + " 00", stack.top(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 01", stack,true,0);
         testReturnObject(testName + " 02", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
@@ -79,7 +79,7 @@ public class Test {
         testReturnObject(testName + " 23", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 24", stack,true,0);
 
-		// Test the new ImprovedStack methods
+        // Test the new ImprovedStack methods
         stack.push      ("First element");
         testStack       (testName + " 25", stack,false,1);
         stack.push      (1234.54);
@@ -128,7 +128,7 @@ public class Test {
         testReturnObject(testName + " 48", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 49", stack,true,0);
 
-	}
+    }
 
 
     /**
@@ -138,7 +138,7 @@ public class Test {
      * @param stack the AbstractStack type for StackImpl implementation chosen
      */
     private static void testLists(String testName, AbstractStack stack) {
-		// Test empty list
+        // Test empty list
         testReturnObject(testName + " 00", stack.top(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 01", stack,true,0);
         testReturnObject(testName + " 02", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
@@ -169,7 +169,7 @@ public class Test {
         testStack       (testName + " 22", stack,true,0);
         testReturnObject(testName + " 23", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 24", stack,true,0);
-	}
+    }
 
 
     /**
@@ -209,7 +209,7 @@ public class Test {
         testReturnObject(testName + " 23", sl.get(2), "Fifth element",  false, ErrorMessage.NO_ERROR);
         testReturnObject(testName + " 24", sl.get(3), "Seventh element",  false, ErrorMessage.NO_ERROR);
         testReturnObject(testName + " 25", sl.get(4), "Nineth element",  false, ErrorMessage.NO_ERROR);
-	}
+    }
 
     /**
      * Test run multiple the FunctionalArrayList calls
@@ -218,7 +218,7 @@ public class Test {
      * @param functionalList the FunctionalList type implementation chosen
      */
     private static void testLists(String testName, FunctionalList functionalList) {
-		// Test empty list
+        // Test empty list
         testReturnObject(testName + " 00", functionalList.head(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
 
         // Test new additions to the list
@@ -247,7 +247,7 @@ public class Test {
         testArrayList   (testName + " 13", shortList,false,1);
         testReturnObject(testName + " 14", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
         testReturnObject(testName + " 15", shortList.head(), "ShortList element",  false, ErrorMessage.NO_ERROR);
-	}
+    }
 
     /**
      * Test run the ArrayList or LinkedList
@@ -363,7 +363,7 @@ public class Test {
         testArrayList   (testName + " 90",list,false,1);
         testReturnObject(testName + " 91",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
         testArrayList   (testName + " 92",list,true,0);
-	}
+    }
 
     /**
      * Unit Testing ImprovedStack Implementation.
@@ -375,9 +375,9 @@ public class Test {
      * @param sizeExpected int for the element amount expected in Stack
      */
     private static void testStack(String testName, ImprovedStack stack, boolean isEmptyExpected, int sizeExpected) {
-		boolean isEmptyFound = stack.isEmpty();
-		int     sizeFound    = stack.size();
-		testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
+        boolean isEmptyFound = stack.isEmpty();
+        int     sizeFound    = stack.size();
+        testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
     }
 
     /**
@@ -390,9 +390,9 @@ public class Test {
      * @param sizeExpected int for the element amount expected in Stack
      */
     private static void testStack(String testName, AbstractStack stack, boolean isEmptyExpected, int sizeExpected) {
-		boolean isEmptyFound = stack.isEmpty();
-		int     sizeFound    = stack.size();
-		testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
+        boolean isEmptyFound = stack.isEmpty();
+        int     sizeFound    = stack.size();
+        testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
     }
 
     /**
@@ -405,9 +405,9 @@ public class Test {
      * @param sizeExpected int for the element amount expected in List
      */
     private static void testArrayList(String testName, List list, boolean isEmptyExpected, int sizeExpected) {
-		boolean isEmptyFound = list.isEmpty();
-		int     sizeFound    = list.size();
-		testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
+        boolean isEmptyFound = list.isEmpty();
+        int     sizeFound    = list.size();
+        testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
     }
 
     /**
@@ -420,14 +420,14 @@ public class Test {
      * @param isSizeFound int for the element amount found in list
      */
     private static void testList(String testName, boolean isEmptyFound, int sizeFound, boolean isEmptyExpected, int sizeExpected) {
-		if ( isEmptyFound != isEmptyExpected ) {
-			System.out.println("[" + testName + "]\t - List.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
-		}
+        if ( isEmptyFound != isEmptyExpected ) {
+            System.out.println("[" + testName + "]\t - List.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
+        }
 
-		if ( sizeFound != sizeExpected ) {
-			System.out.println("[" + testName + "]\t - List.size(): " + sizeFound + " expected " + sizeExpected);
-		}
-	}
+        if ( sizeFound != sizeExpected ) {
+            System.out.println("[" + testName + "]\t - List.size(): " + sizeFound + " expected " + sizeExpected);
+        }
+    }
 
 
     /**
@@ -440,31 +440,31 @@ public class Test {
      * @param hasErrorExpected boolean for the expected error
      * @param errorMessageExpected the expected error message
      */
-	private static void testReturnObject(String testName, ReturnObject ro, Object returnValueExpected, boolean hasErrorExpected, ErrorMessage errorMessageExpected) {
-		Object returnValueFound = ro.getReturnValue();
-		boolean hasErrorFound   = ro.hasError();
-		ErrorMessage errorMessageFound = ro.getError();
-		testName = "RO-"+testName;
+    private static void testReturnObject(String testName, ReturnObject ro, Object returnValueExpected, boolean hasErrorExpected, ErrorMessage errorMessageExpected) {
+        Object returnValueFound = ro.getReturnValue();
+        boolean hasErrorFound   = ro.hasError();
+        ErrorMessage errorMessageFound = ro.getError();
+        testName = "RO-"+testName;
 
-		if ( returnValueFound == null && returnValueExpected == null ) {
-			// Do nothing
-		}
-		else if ( returnValueFound == null && returnValueExpected != null ) {
-			System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
-		}
-		else if ( returnValueFound != null && returnValueExpected == null ) {
-			System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
-		}
-		else if ( returnValueFound != null && returnValueExpected != null && !returnValueFound.equals(returnValueExpected) ) {
-			System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
-		}
+        if ( returnValueFound == null && returnValueExpected == null ) {
+            // Do nothing
+        }
+        else if ( returnValueFound == null && returnValueExpected != null ) {
+            System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
+        }
+        else if ( returnValueFound != null && returnValueExpected == null ) {
+            System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
+        }
+        else if ( returnValueFound != null && returnValueExpected != null && !returnValueFound.equals(returnValueExpected) ) {
+            System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
+        }
 
-		if ( hasErrorFound != hasErrorExpected ) {
-			System.out.println("[" + testName + "]\t - HasError: " + hasErrorFound + " expected " + hasErrorExpected);
-		}
+        if ( hasErrorFound != hasErrorExpected ) {
+            System.out.println("[" + testName + "]\t - HasError: " + hasErrorFound + " expected " + hasErrorExpected);
+        }
 
-		if ( !errorMessageFound.equals(errorMessageExpected) ){
-			System.out.println("[" + testName + "]\t - ErrorMessage: " + errorMessageFound + " expected: " + errorMessageExpected);
-		}
-	}
+        if ( !errorMessageFound.equals(errorMessageExpected) ){
+            System.out.println("[" + testName + "]\t - ErrorMessage: " + errorMessageFound + " expected: " + errorMessageExpected);
+        }
+    }
 }

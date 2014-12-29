@@ -30,7 +30,7 @@ public abstract class AbstractStack implements Stack {
      * @param list the list to be used
      */
     public AbstractStack(List list) {
-	  this.internalList = list;
+      this.internalList = list;
     }
 }
 
