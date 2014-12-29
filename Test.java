@@ -3,6 +3,9 @@ public class Test {
 		// Testing ImprovedStack with the ImprovedStackImpl implementation
 		testLists("ImprovedStack", new ImprovedStackImpl(new LinkedList()));
 
+		// Testing ImprovedStack with the ImprovedStackImpl implementation
+		testLists("ImprovedStack", new ImprovedStackImpl(new ArrayList()));
+
 		// Testing AbstractStack with StackImpl on a LinkedList
 		testLists("AbstractStack", new StackImpl(new LinkedList()));
 
@@ -124,9 +127,6 @@ public class Test {
         testReturnObject(testName + " 47", stack.pop(), "First element", false, ErrorMessage.NO_ERROR);
         testReturnObject(testName + " 48", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 49", stack,true,0);
-
-
-
 
 	}
 
@@ -377,14 +377,7 @@ public class Test {
     private static void testStack(String testName, ImprovedStack stack, boolean isEmptyExpected, int sizeExpected) {
 		boolean isEmptyFound = stack.isEmpty();
 		int     sizeFound    = stack.size();
-
-		if ( isEmptyFound != isEmptyExpected ) {
-			System.out.println("[" + testName + "]\t - Stack.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
-		}
-
-		if ( sizeFound != sizeExpected ) {
-			System.out.println("[" + testName + "]\t - Stack.size(): " + sizeFound + " expected " + sizeExpected);
-		}
+		testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
     }
 
     /**
@@ -399,14 +392,7 @@ public class Test {
     private static void testStack(String testName, AbstractStack stack, boolean isEmptyExpected, int sizeExpected) {
 		boolean isEmptyFound = stack.isEmpty();
 		int     sizeFound    = stack.size();
-
-		if ( isEmptyFound != isEmptyExpected ) {
-			System.out.println("[" + testName + "]\t - Stack.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
-		}
-
-		if ( sizeFound != sizeExpected ) {
-			System.out.println("[" + testName + "]\t - Stack.size(): " + sizeFound + " expected " + sizeExpected);
-		}
+		testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
     }
 
     /**
@@ -421,7 +407,19 @@ public class Test {
     private static void testArrayList(String testName, List list, boolean isEmptyExpected, int sizeExpected) {
 		boolean isEmptyFound = list.isEmpty();
 		int     sizeFound    = list.size();
+		testList(testName, isEmptyFound, sizeFound, isEmptyExpected, sizeExpected);
+    }
 
+    /**
+     * Gemeric Results
+     *
+     * @param testName the test name
+     * @param isEmptyExpected boolean expected list value for isEmpty()
+     * @param sizeExpected int for the element amount expected in List
+     * @param isEmptyFound boolean found list value for esEmpty()
+     * @param isSizeFound int for the element amount found in list
+     */
+    private static void testList(String testName, boolean isEmptyFound, int sizeFound, boolean isEmptyExpected, int sizeExpected) {
 		if ( isEmptyFound != isEmptyExpected ) {
 			System.out.println("[" + testName + "]\t - List.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
 		}
@@ -429,7 +427,8 @@ public class Test {
 		if ( sizeFound != sizeExpected ) {
 			System.out.println("[" + testName + "]\t - List.size(): " + sizeFound + " expected " + sizeExpected);
 		}
-    }
+	}
+
 
     /**
      * Unit Testing ReturnObject Implementation.
