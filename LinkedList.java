@@ -94,21 +94,21 @@ public class LinkedList implements List {
 
 		// Validate index only for first time
 		if ( this.first ) {
-    		ro = checkIndex(index);
-    		if ( ro.hasError() ) {
-				return ro;
-			}
-
 			// On first element, no data is stored
 			// Check if list is empty and return appropriate error here
 			if( isEmpty() ) {
 				return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
 			}
+
+    		ro = checkIndex(index);
+    		if ( ro.hasError() && index > size ) {
+				return ro;
+			}
 		}
 
 		// Index == -1 means that we have the matched index
 		// Please note that index zero is the first element
-		// First element from ArrayList is not to be used.
+		// First element from LinkedList is not to be used.
 		if ( index == -1 ) {
 			ro = new ReturnObjectImpl(this.obj);
 		}
@@ -118,8 +118,8 @@ public class LinkedList implements List {
 			ro = this.next.get(--index);
 		}
 		else {
-			// If nothing found, then a index requested points to a null structure
-			ro = new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+			// Index goes beyond a null next pointer..
+			ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
 		}
 
 		return ro;
@@ -141,23 +141,22 @@ public class LinkedList implements List {
    		ReturnObject ro = null;
 		// Validate index only for first time
 		if ( this.first ) {
-    		ro = checkIndex(index);
-    		if ( ro.hasError() ) {
-				return ro;
-			}
-
 			// On first element, no data is stored
 			// Check if list is empty and return appropriate error here
 			if( isEmpty() ) {
 				return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+			}
+
+    		ro = checkIndex(index);
+    		if ( ro.hasError() ) {
+				return ro;
 			}
 		}
 
         // Check if next element is the one we need to remove
 		if ( index == 0 ) {
 			if ( this.next == null ) {
-				ro = new ReturnObjectImpl(this.next.obj);
-				this.next = null;
+				ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
 			}
 			else {
 				ro = new ReturnObjectImpl(this.next.obj);
@@ -201,12 +200,6 @@ public class LinkedList implements List {
     		if ( ro.hasError() ) {
 				return ro;
 			}
-
-			// On first element, no data is stored
-			// Check if list is empty and return appropriate error here
-			if( isEmpty() ) {
-				return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
-			}
 		}
 
 		// Check if the item is not null. Null is not allowed
@@ -229,8 +222,18 @@ public class LinkedList implements List {
    		        // Prepare the response
    		        ro = new ReturnObjectImpl(item);
 			}
-			else {
+			else if ( this.next != null ) {
 				ro = this.next.add(--index, item);
+			}
+			// Special case when adding the first element
+			else if ( this.next == null && index == 0 ) {
+				// Add the element to the next. Done.
+				this.next = new LinkedList(item);
+   		        // Prepare the response
+   		        ro = new ReturnObjectImpl(item);
+			}
+			else {
+				ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
 			}
 		}
 

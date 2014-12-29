@@ -84,8 +84,11 @@ public class ArrayList implements List {
 	public ReturnObject get(int index) {
 		ReturnObject ro = checkIndex(index);
 		if ( !ro.hasError() ) {
-			if ( this.array[index] != null ) {
+			if ( this.array[index] != null && index < size ) {
        			ro = new ReturnObjectImpl(this.array[index]);
+			}
+			else if ( index >= size ) {
+				ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
 			}
 			else {
 				ro = new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
@@ -184,6 +187,11 @@ public class ArrayList implements List {
 		        ro = new ReturnObjectImpl(item);
 			}
 		}
+		// Exception when index is 0 and size is 0
+		else if ( index == 0 && size == 0 ) {
+			ro = add(item);
+		}
+
 		return ro;
     }
 
@@ -242,13 +250,8 @@ public class ArrayList implements List {
 		}
 
 		// Check index out of bounds, i.e.: bigger than the array size
-		else if ( index >= this.array.length ) {
+		else if ( index > this.size ) {
 			ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-		}
-
-		// Check index on null structure: inside the array boundaries but not allowed to access
-		else if ( this.array[index] == null ) {
-			ro = new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
 		}
 
 		// When all checks pass, the index is valid.

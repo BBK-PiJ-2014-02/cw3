@@ -39,9 +39,9 @@ public class Test {
      */
     private static void testLists(String testName, AbstractStack stack) {
 		// Test empty list
-        testReturnObject(testName + " 00", stack.top(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testReturnObject(testName + " 00", stack.top(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 01", stack,true,0);
-        testReturnObject(testName + " 02", stack.pop(), null,  true, ErrorMessage.EMPTY_STRUCTURE);
+        testReturnObject(testName + " 02", stack.pop(), null, true, ErrorMessage.EMPTY_STRUCTURE);
         testStack       (testName + " 03", stack,true,0);
         stack.push      ("First element");
         testStack       (testName + " 04", stack,false,1);
@@ -157,59 +157,112 @@ public class Test {
      */
     private static void testLists(String testName, List list) {
         // testArrayList(testName, list, isEmptyExpected, sizeExpected)
-        testArrayList   (testName + " 00b",list,true,0);
+        testArrayList   (testName + " 00",list,true,0);
         testReturnObject(testName + " 01",list.add("First element"), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 01b",list,false,1);
-        testReturnObject(testName + " 02",list.add("Second element"),"Second element", false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 02b",list,false,2);
-        testReturnObject(testName + " 03",list.add(0,"Insert new at zero"), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 03b",list,false,3);
-        testReturnObject(testName + " 04",list.add(1000000000,"Invalid position"), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
-        testArrayList   (testName + " 04b",list,false,3);
-        testReturnObject(testName + " 05",list.add("Element to remove"),"Element to remove", false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 05b",list,false,4);
-        testReturnObject(testName + " 06",list.add("Last element"),"Last element", false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 06b",list,false,5);
-        testReturnObject(testName + " 07",list.add(null), null,  true, ErrorMessage.INVALID_ARGUMENT);
-        testArrayList   (testName + " 07b",list,false,5);
-
-        testReturnObject(testName + " 08",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 08b",list,false,5);
-        testReturnObject(testName + " 09",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 09b",list,false,5);
-        testReturnObject(testName + " 10",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 10b",list,false,5);
-        testReturnObject(testName + " 11",list.get(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 11b",list,false,5);
-        testReturnObject(testName + " 12",list.get(4), "Last element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 12b",list,false,5);
-
-        testReturnObject(testName + " 13",list.get(5), null,  true, ErrorMessage.EMPTY_STRUCTURE);
-        testArrayList   (testName + " 13b",list,false,5);
-
-        testReturnObject(testName + " 14",list.remove(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 14b",list,false,4);
+        testArrayList   (testName + " 02",list,false,1);
+        testReturnObject(testName + " 03",list.add("Second element"),"Second element", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 04",list,false,2);
+        testReturnObject(testName + " 05",list.add(0,"Insert new at zero"), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 06",list,false,3);
+        testReturnObject(testName + " 07",list.add(1000000000,"Invalid position"), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testArrayList   (testName + " 08",list,false,3);
+        testReturnObject(testName + " 09",list.add("Element to remove"),"Element to remove", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 10",list,false,4);
+        testReturnObject(testName + " 11",list.add("Last element"),"Last element", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 12",list,false,5);
+        testReturnObject(testName + " 13",list.add(null), null,  true, ErrorMessage.INVALID_ARGUMENT);
+        testArrayList   (testName + " 14",list,false,5);
 
         testReturnObject(testName + " 15",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 15b",list,false,4);
-        testReturnObject(testName + " 16",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 16b",list,false,4);
-        testReturnObject(testName + " 17",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 17b",list,false,4);
-        testReturnObject(testName + " 18",list.get(3), "Last element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 18b",list,false,4);
-        testReturnObject(testName + " 19",list.get(4), null,  true, ErrorMessage.EMPTY_STRUCTURE);
-        testArrayList   (testName + " 19b",list,false,4);
+        testArrayList   (testName + " 16",list,false,5);
+        testReturnObject(testName + " 17",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 18",list,false,5);
+        testReturnObject(testName + " 19",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 20",list,false,5);
+        testReturnObject(testName + " 21",list.get(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 22",list,false,5);
+        testReturnObject(testName + " 23",list.get(4), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 24",list,false,5);
 
-        testReturnObject(testName + " 20",list.remove(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 20b",list,false,3);
-        testReturnObject(testName + " 21",list.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 21b",list,false,2);
-        testReturnObject(testName + " 22",list.remove(0), "Second element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 22b",list,false,1);
-        testReturnObject(testName + " 23",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 23b",list,true,0);
+        testReturnObject(testName + " 25",list.get(5), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testArrayList   (testName + " 26",list,false,5);
 
+        testReturnObject(testName + " 27",list.remove(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 28",list,false,4);
+
+        testReturnObject(testName + " 29",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 30",list,false,4);
+        testReturnObject(testName + " 31",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 32",list,false,4);
+        testReturnObject(testName + " 33",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 34",list,false,4);
+        testReturnObject(testName + " 35",list.get(3), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 36",list,false,4);
+        testReturnObject(testName + " 37",list.get(4), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testArrayList   (testName + " 38",list,false,4);
+
+        testReturnObject(testName + " 39",list.remove(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 40",list,false,3);
+        testReturnObject(testName + " 41",list.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 42",list,false,2);
+        testReturnObject(testName + " 43",list.remove(0), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 44",list,false,1);
+        testReturnObject(testName + " 45",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 46",list,true,0);
+
+        // Testing with add(index,item)
+        testArrayList   (testName + " 47",list,true,0);
+        testReturnObject(testName + " 48",list.add(0,"First element"), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 49",list,false,1);
+        testReturnObject(testName + " 50",list.add(1,"Second element"),"Second element", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 51",list,false,2);
+        testReturnObject(testName + " 52",list.add(0,"Insert new at zero"), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 53",list,false,3);
+        testReturnObject(testName + " 54",list.add(1000000000,"Invalid position"), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testArrayList   (testName + " 55",list,false,3);
+        testReturnObject(testName + " 56",list.add(3,"Element to remove"),"Element to remove", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 57",list,false,4);
+        testReturnObject(testName + " 58",list.add(4,"Last element"),"Last element", false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 59",list,false,5);
+        testReturnObject(testName + " 60",list.add(null), null,  true, ErrorMessage.INVALID_ARGUMENT);
+        testArrayList   (testName + " 61",list,false,5);
+
+        testReturnObject(testName + " 62",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 63",list,false,5);
+        testReturnObject(testName + " 64",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 65",list,false,5);
+        testReturnObject(testName + " 66",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 67",list,false,5);
+        testReturnObject(testName + " 68",list.get(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 69",list,false,5);
+        testReturnObject(testName + " 70",list.get(4), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 71",list,false,5);
+
+        testReturnObject(testName + " 72",list.get(5), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testArrayList   (testName + " 73",list,false,5);
+
+        testReturnObject(testName + " 74",list.remove(3), "Element to remove",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 75",list,false,4);
+
+        testReturnObject(testName + " 75",list.get(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 76",list,false,4);
+        testReturnObject(testName + " 77",list.get(1), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 78",list,false,4);
+        testReturnObject(testName + " 79",list.get(2), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 80",list,false,4);
+        testReturnObject(testName + " 81",list.get(3), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 82",list,false,4);
+        testReturnObject(testName + " 83",list.get(4), null,  true, ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        testArrayList   (testName + " 84",list,false,4);
+
+        testReturnObject(testName + " 85",list.remove(0), "Insert new at zero",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 86",list,false,3);
+        testReturnObject(testName + " 87",list.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 88",list,false,2);
+        testReturnObject(testName + " 89",list.remove(0), "Second element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 90",list,false,1);
+        testReturnObject(testName + " 91",list.remove(0), "Last element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 92",list,true,0);
 	}
 
     /**
@@ -226,11 +279,11 @@ public class Test {
 		int     sizeFound    = stack.size();
 
 		if ( isEmptyFound != isEmptyExpected ) {
-			System.out.println("[" + testName + "]\t - Stack.isEmpty() Found: " + isEmptyFound + " and expected " + isEmptyExpected);
+			System.out.println("[" + testName + "]\t - Stack.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
 		}
 
 		if ( sizeFound != sizeExpected ) {
-			System.out.println("[" + testName + "]\t - Stack.size() Found: " + sizeFound + " and expected " + sizeExpected);
+			System.out.println("[" + testName + "]\t - Stack.size(): " + sizeFound + " expected " + sizeExpected);
 		}
     }
 
@@ -248,11 +301,11 @@ public class Test {
 		int     sizeFound    = list.size();
 
 		if ( isEmptyFound != isEmptyExpected ) {
-			System.out.println("[" + testName + "]\t - List.isEmpty() Found: " + isEmptyFound + " and expected " + isEmptyExpected);
+			System.out.println("[" + testName + "]\t - List.isEmpty(): " + isEmptyFound + " expected " + isEmptyExpected);
 		}
 
 		if ( sizeFound != sizeExpected ) {
-			System.out.println("[" + testName + "]\t - List.size() Found: " + sizeFound + " and expected " + sizeExpected);
+			System.out.println("[" + testName + "]\t - List.size(): " + sizeFound + " expected " + sizeExpected);
 		}
     }
 
@@ -276,21 +329,21 @@ public class Test {
 			// Do nothing
 		}
 		else if ( returnValueFound == null && returnValueExpected != null ) {
-			System.out.println("[" + testName + "]\t - Returned values differ. Found: " + returnValueFound + " and expected " + returnValueExpected);
+			System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
 		}
 		else if ( returnValueFound != null && returnValueExpected == null ) {
-			System.out.println("[" + testName + "]\t - Returned values differ. Found: " + returnValueFound + " and expected " + returnValueExpected);
+			System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
 		}
 		else if ( returnValueFound != null && returnValueExpected != null && !returnValueFound.equals(returnValueExpected) ) {
-			System.out.println("[" + testName + "]\t - Returned values differ. Found: " + returnValueFound + " and expected " + returnValueExpected);
+			System.out.println("[" + testName + "]\t - Returned: " + returnValueFound + " expected " + returnValueExpected);
 		}
 
 		if ( hasErrorFound != hasErrorExpected ) {
-			System.out.println("[" + testName + "]\t - HasError values differ. Found: " + hasErrorFound + " and expected " + hasErrorExpected);
+			System.out.println("[" + testName + "]\t - HasError: " + hasErrorFound + " expected " + hasErrorExpected);
 		}
 
 		if ( !errorMessageFound.equals(errorMessageExpected) ){
-			System.out.println("[" + testName + "]\t - ErrorMessage values differ. Found: " + errorMessageFound + " and expected " + errorMessageExpected);
+			System.out.println("[" + testName + "]\t - ErrorMessage: " + errorMessageFound + " expected: " + errorMessageExpected);
 		}
 	}
 }
