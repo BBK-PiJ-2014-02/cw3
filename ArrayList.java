@@ -162,39 +162,32 @@ public class ArrayList implements List {
         // Check if the index is valid
         ReturnObject ro = checkIndex(index);
 
+        // Check if the item is not null. Null is not allowed
+        if ( item == null ) {
+            return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+        }
+
         // No error, means valid index
         if ( !ro.hasError() ) {
 
-            // Check if the item is not null. Null is not allowed
-            if ( item == null ) {
-                ro = new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
-            }
-
             // Add the element on given index, but first, moving all elements
             // on given index and subsequent, one index up.
-            else {
-
-                // Extend the array if needed before adding the new element
-                if ( (this.size + 1) >= this.array.length ) {
-                    extendArray();
-                }
-
-                // Shift all elements one index up
-                shiftUp(index);
-
-                // Add the item into the respective indext
-                this.array[index] = item;
-
-                // Number of elements increases
-                this.size++;
-
-                // Prepare the response
-                ro = new ReturnObjectImpl(item);
+            // Extend the array if needed before adding the new element
+            if ( (this.size + 1) >= this.array.length ) {
+                extendArray();
             }
-        }
-        // Exception when index is 0 and size is 0
-        else if ( index == 0 && size == 0 ) {
-            ro = add(item);
+
+            // Shift all elements one index up
+            shiftUp(index);
+
+            // Add the item into the respective index
+            this.array[index] = item;
+
+            // Number of elements increases
+            this.size++;
+
+            // Prepare the response
+            return new ReturnObjectImpl(item);
         }
 
         return ro;
@@ -212,11 +205,9 @@ public class ArrayList implements List {
      *         the item added or containing an appropriate error message
      */
     public ReturnObject add(Object item) {
-        ReturnObject ro;
-
         // No null objects allowed
         if ( item == null ) {
-            ro = new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+            return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
         }
 
         // Add the element to the end of the list.
@@ -234,9 +225,8 @@ public class ArrayList implements List {
             this.size++;
 
             // Prepare the response
-            ro = new ReturnObjectImpl(item);
+            return new ReturnObjectImpl(item);
         }
-        return ro;
     }
 
 
@@ -247,24 +237,20 @@ public class ArrayList implements List {
      * @return ReturnObject with the error or null if no error
      */
     private ReturnObject checkIndex(int index) {
-        ReturnObject ro;
-
         // Check index out of bounds, i.e.: negative
         if ( index < 0 ) {
-            ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+            return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
         // Check index out of bounds, i.e.: bigger than the array size
         else if ( index > this.size ) {
-            ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+            return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
         // When all checks pass, the index is valid.
         else {
-            ro = new ReturnObjectImpl(ErrorMessage.NO_ERROR);
+            return new ReturnObjectImpl(ErrorMessage.NO_ERROR);
         }
-
-        return ro;
     }
 
     /**
@@ -323,7 +309,6 @@ public class ArrayList implements List {
      * Shift all elements one index up starting from the given index
      */
     private void shiftUp(int index) {
-
         // Make sure there is still enough space in the array to add more elements.
         if ( this.array.length < this.size + (this.array.length * ARRAY_INCREASE_PERCENTAGE / 100) ) {
             extendArray();
@@ -339,7 +324,6 @@ public class ArrayList implements List {
      * Shift all elements one index down starting from the given index+1
      */
     private void shiftDown(int index) {
-
         // Move all subsequent elements of index, one index down,
         // overriding the element on the index position.
         for( int i = index; i < this.array.length-1; i++ ) {

@@ -6,15 +6,15 @@ public class Test {
 
 		System.out.print("\nTesting ArrayList() efficiency:");
 		long start = System.currentTimeMillis();
-		for(int i = 0; i < 100000; i++) improvedArrayList.push(i);
-		for(int i = 0; i < 100000; i++) improvedArrayList.pop();
+		for(int i = 0; i < 10000; i++) improvedArrayList.push(i);
+		for(int i = 0; i < 10000; i++) improvedArrayList.pop();
 		long end = System.currentTimeMillis();
 		System.out.println(" "+(end-start)+"ms");
 
 		System.out.print("Testing LinkedList() efficiency:");
 		start = System.currentTimeMillis();
-		for(int i = 0; i < 100000; i++) improvedLinkedList.push(i);
-		for(int i = 0; i < 100000; i++) improvedLinkedList.pop();
+		for(int i = 0; i < 10000; i++) improvedLinkedList.push(i);
+		for(int i = 0; i < 10000; i++) improvedLinkedList.pop();
 		end = System.currentTimeMillis();
 		System.out.println(" "+(end-start)+"ms");
 
@@ -99,6 +99,7 @@ public class Test {
         stack.push      (1234.54);
         stack.push      ("Third element");
         stack.push      (1234.54);
+        stack.push      (null);
         stack.push      (1234.54);
         stack.push      (1234.54);
         stack.push      (1234.54);
@@ -172,6 +173,7 @@ public class Test {
         stack.push      ("Third element");
         testStack       (testName + " 13", stack,false,3);
         stack.push      ("Fourth element");
+        stack.push      (null);
         testStack       (testName + " 14", stack,false,4);
         testReturnObject(testName + " 15", stack.pop(), "Fourth element", false, ErrorMessage.NO_ERROR);
         testStack       (testName + " 16", stack,false,3);
@@ -214,15 +216,16 @@ public class Test {
         testArrayList   (testName + " 17", sampleList,false,9);
         testReturnObject(testName + " 18", sampleList.add("Tenth element"), "Tenth element",  false, ErrorMessage.NO_ERROR);
         testArrayList   (testName + " 19", sampleList,false,10);
+        testReturnObject(testName + " 20", sampleList.add(null), null,  true, ErrorMessage.INVALID_ARGUMENT);
 
         // Check sampled list
         SampleableList sl = sampleList.sample();
-        testArrayList   (testName + " 20", sl,false,5);
-        testReturnObject(testName + " 21", sl.get(0), "First element",  false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 22", sl.get(1), "Third element",  false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 23", sl.get(2), "Fifth element",  false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 24", sl.get(3), "Seventh element",  false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 25", sl.get(4), "Nineth element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 21", sl,false,5);
+        testReturnObject(testName + " 22", sl.get(0), "First element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 23", sl.get(1), "Third element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 24", sl.get(2), "Fifth element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 25", sl.get(3), "Seventh element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 26", sl.get(4), "Nineth element",  false, ErrorMessage.NO_ERROR);
     }
 
     /**
@@ -242,25 +245,27 @@ public class Test {
         // Test head
         testReturnObject(testName + " 02", functionalList.head(), "First element",  false, ErrorMessage.NO_ERROR);
         testReturnObject(testName + " 03", functionalList.add("Second element"),"Second element", false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 04", functionalList.add("Third element"),"Third element", false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 05", functionalList.head(), "First element",  false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 06", functionalList.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 07", functionalList,false,2);
-        testReturnObject(testName + " 08", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 04", functionalList.add(null),null, true, ErrorMessage.INVALID_ARGUMENT);
+        testReturnObject(testName + " 05", functionalList.add("Third element"),"Third element", false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 06", functionalList.head(), "First element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 07", functionalList.remove(0), "First element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 08", functionalList,false,2);
+        testReturnObject(testName + " 09", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
 
         // Test rest
         FunctionalList shortList = functionalList.rest();
-        testArrayList   (testName + " 07", shortList,false,1);
-        testReturnObject(testName + " 08", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 09", shortList.head(), "Third element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 10", shortList,false,1);
+        testReturnObject(testName + " 11", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 12", shortList.head(), "Third element",  false, ErrorMessage.NO_ERROR);
 
         // Test adding elements to short list and checking FunctionalArrayList does not change
-        testReturnObject(testName + " 10", shortList.add("ShortList element"), "ShortList element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 11", shortList,false,2);
-        testReturnObject(testName + " 12", shortList.remove(0), "Third element",  false, ErrorMessage.NO_ERROR);
-        testArrayList   (testName + " 13", shortList,false,1);
-        testReturnObject(testName + " 14", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
-        testReturnObject(testName + " 15", shortList.head(), "ShortList element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 13", shortList.add("ShortList element"), "ShortList element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 14", shortList.add(null), null, true, ErrorMessage.INVALID_ARGUMENT);
+        testArrayList   (testName + " 15", shortList,false,2);
+        testReturnObject(testName + " 16", shortList.remove(0), "Third element",  false, ErrorMessage.NO_ERROR);
+        testArrayList   (testName + " 17", shortList,false,1);
+        testReturnObject(testName + " 18", functionalList.head(), "Second element",  false, ErrorMessage.NO_ERROR);
+        testReturnObject(testName + " 19", shortList.head(), "ShortList element",  false, ErrorMessage.NO_ERROR);
     }
 
     /**

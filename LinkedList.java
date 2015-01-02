@@ -138,7 +138,7 @@ public class LinkedList implements List {
      *         encapsulated in a ReturnObject
      */
     public ReturnObject remove(int index) {
-           ReturnObject ro = null;
+        ReturnObject ro = null;
         // Validate index only for first time
         if ( this.first ) {
             // On first element, no data is stored
@@ -146,11 +146,11 @@ public class LinkedList implements List {
             if( isEmpty() ) {
                 return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
             }
-
-            ro = checkIndex(index);
-            if ( ro.hasError() ) {
-                return ro;
-            }
+            // If not empty, check if index is valid
+            else {
+                ro = checkIndex(index);
+                if ( ro.hasError() ) return ro;
+			}
         }
 
         // Check if next element is the one we need to remove
@@ -193,7 +193,13 @@ public class LinkedList implements List {
      *         the item added or containing an appropriate error message
      */
     public ReturnObject add(int index, Object item) {
-           ReturnObject ro;
+        ReturnObject ro;
+
+        // Check if the item is not null. Null is not allowed
+        if ( item == null ) {
+            return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+        }
+
         // Validate index only for first time
         if ( this.first ) {
             ro = checkIndex(index);
@@ -202,45 +208,39 @@ public class LinkedList implements List {
             }
         }
 
-        // Check if the item is not null. Null is not allowed
-        if ( item == null ) {
-            ro = new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
-        }
         // Add the element on given index
         // ensuring that the linked chain is not broken.
+        if ( index == -1 ) {
+            // Duplicate this.obj into a newly created item
+            LinkedList newList = new LinkedList(this.obj);
+            // Store the next item in to link to.
+            LinkedList nextList = this.next;
+            // Change this.obj with the current given item
+            this.obj = item;
+            // Restitch the list
+            this.next = newList;
+            newList.next = nextList;
+            // Prepare the response
+            ro = new ReturnObjectImpl(item);
+        }
+        // Reaching here, means not yet in position,
+        // recursively keep searching while we have next.
+        else if ( this.next != null ) {
+            ro = this.next.add(--index, item);
+        }
+        // Special case when adding the first element
+        else if ( this.next == null && index == 0 ) {
+            // Add the element to the next. Done.
+            this.next = new LinkedList(item);
+            // Prepare the response
+            ro = new ReturnObjectImpl(item);
+        }
         else {
-            if ( index == -1 ) {
-                // Duplicate this.obj into a newly created item
-                LinkedList newList = new LinkedList(this.obj);
-                // Store the next item in to link to.
-                LinkedList nextList = this.next;
-                // Change this.obj with the current given item
-                this.obj = item;
-                // Restitch the list
-                this.next = newList;
-                newList.next = nextList;
-                   // Prepare the response
-                   ro = new ReturnObjectImpl(item);
-            }
-            else if ( this.next != null ) {
-                ro = this.next.add(--index, item);
-            }
-            // Special case when adding the first element
-            else if ( this.next == null && index == 0 ) {
-                // Add the element to the next. Done.
-                this.next = new LinkedList(item);
-                   // Prepare the response
-                   ro = new ReturnObjectImpl(item);
-            }
-            else {
-                ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-            }
+            ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
-        if ( first ) {
-            // Update the number of elements
-            this.size++;
-        }
+        // Only increase size for first element.
+        if ( first ) this.size++;
 
         return ro;
     }
@@ -258,17 +258,23 @@ public class LinkedList implements List {
      */
     public ReturnObject add(Object item) {
         ReturnObject ro;
+
+        // If item is null, return immediately withoyt any further action
         if ( item == null ) {
-            ro = new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+            return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
         }
+        // If the next element in list is null, we have reached the end of the list
+        // Append the new item here.
         else if ( this.next == null ) {
             this.size++;
             this.next = new LinkedList(item);
             ro = new ReturnObjectImpl(item);
         }
+        // We have not yet reached the end of the list.
         else {
             ro = this.next.add(item);
-            this.size++;
+            // Only increment size for first element.
+            if ( first ) this.size++;
         }
 
         return ro;
@@ -281,23 +287,19 @@ public class LinkedList implements List {
      * @return ReturnObject with the error or null if no error
      */
     private ReturnObject checkIndex(int index) {
-           ReturnObject ro;
-
         // Check index out of bounds, i.e.: negative
         if ( index < 0 ) {
-            ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+            return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
         // Check index out of bounds, i.e.: bigger than the list size
         else if ( index > this.size ) {
-            ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+            return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
         // When all checks pass, the index is valid.
         else {
-            ro = new ReturnObjectImpl(ErrorMessage.NO_ERROR);
+            return new ReturnObjectImpl(ErrorMessage.NO_ERROR);
         }
-
-        return ro;
     }
 }
