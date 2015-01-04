@@ -12,7 +12,7 @@
  *
  * @author Vasco Horta
  */
-public class StackImpl extends AbstractStack implements Stack {
+public class StackImpl extends AbstractStack {
     /**
      * Constructor accepting a List type.
      *
