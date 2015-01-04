@@ -150,7 +150,7 @@ public class LinkedList implements List {
             else {
                 ro = checkIndex(index);
                 if ( ro.hasError() ) return ro;
-			}
+            }
         }
 
         // Check if next element is the one we need to remove
