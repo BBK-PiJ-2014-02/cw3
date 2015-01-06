@@ -37,9 +37,8 @@ public class ImprovedStackImpl implements ImprovedStack {
     public ImprovedStack reverse() {
         // Picked LinkedList
         ImprovedStack is = new ImprovedStackImpl(new LinkedList());
-        int size         = list.size();
 
-        for( int i = 0; i < size; i++) {
+        for( int i = 0; i < size(); i++) {
             ReturnObject ro = list.get(i);
                is.push(ro.getReturnValue());
         }
@@ -58,14 +57,16 @@ public class ImprovedStackImpl implements ImprovedStack {
      */
     public void remove(Object object) {
         // Need to run through all list
-        for(int i = 0; i < list.size(); i++) {
+        for(int i = 0; i < size(); i++) {
             // Get the return object for the index i
             ReturnObject ro = list.get(i);
             // Extract the object to be compared
-               Object item = ro.getReturnValue();
-               // If equals, remove it and redo that same index
-               // since current i will be occupied with the next item
-               if ( item.equals(object) ){
+
+            Object item = ro.getReturnValue();
+
+            // If equals, remove it and redo that same index
+            // since current i will be occupied with the next item
+            if ( item.equals(object) ){
                 list.remove(i);
                 i--;
             }
@@ -97,7 +98,12 @@ public class ImprovedStackImpl implements ImprovedStack {
      */
     public void push(Object item) {
         // Push the new item into position 0
-        list.add(0,item);
+        if( isEmpty() ) {
+            list.add(item);
+        }
+        else {
+            list.add(0,item);
+        }
     }
 
     /**

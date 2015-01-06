@@ -231,7 +231,10 @@ public class ArrayList implements List {
 
 
     /**
-     * Returns null if valid or the ReturnObject with the error
+     * Returns a ReturnObject with the result.
+     *
+     * INDEX_OUT_OF_BOUNDS if negative or <= size
+     * NO_ERROR otherwise.
      *
      * @param index of the array
      * @return ReturnObject with the error or null if no error
@@ -242,9 +245,14 @@ public class ArrayList implements List {
             return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
-        // Check index out of bounds, i.e.: bigger than the array size
-        else if ( index > this.size ) {
-            return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        // Check index out of bounds, i.e.: bigger than or equal to the array size
+        else if ( index >= this.size ) {
+            if ( isEmpty() ) {
+                return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+            }
+            else {
+                return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+            }
         }
 
         // When all checks pass, the index is valid.

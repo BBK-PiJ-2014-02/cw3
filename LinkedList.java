@@ -292,9 +292,14 @@ public class LinkedList implements List {
             return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
-        // Check index out of bounds, i.e.: bigger than the list size
-        else if ( index > this.size ) {
-            return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+        // Check index out of bounds, i.e.: bigger than or equal to the list size
+        else if ( index >= this.size ) {
+            if ( isEmpty() ) {
+                return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+            }
+            else {
+                return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+            }
         }
 
         // When all checks pass, the index is valid.
