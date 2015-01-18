@@ -46,7 +46,7 @@ public class LinkedList implements List {
     public LinkedList() {
         this.size  = 0;
         this.next  = null;
-        this.obj   = obj;
+        this.obj   = null;
         this.first = true;
     }
 
@@ -90,7 +90,7 @@ public class LinkedList implements List {
      *         encapsulated in a ReturnObject
      */
     public ReturnObject get(int index) {
-           ReturnObject ro;
+        ReturnObject ro;
 
         // Validate index only for first time
         if ( this.first ) {
