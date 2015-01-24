@@ -1,9 +1,12 @@
+/**
+ * Enum ErrorMessage for all possible recognized types of error.
+ */
 public enum ErrorMessage {
     /**
-     * No error. 
+     * No error.
      */
     NO_ERROR,
-   
+
     /**
      * This error is produced e.g. when the programmer tries to
      * retrieve an element from an empty data structure.
@@ -12,7 +15,7 @@ public enum ErrorMessage {
 
     /**
      * This error is produced e.g. when the programmer tries to
-     * insert an element on a negative index of a list. 
+     * insert an element on a negative index of a list.
      */
 
     INDEX_OUT_OF_BOUNDS,
