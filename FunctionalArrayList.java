@@ -11,7 +11,7 @@
  * contain either an object or an error value of the right kind (as
  * defined in {@see ErrorMessage}).
  *
- * @author Vasco Horta
+ * @author VascoHorta
  */
 public class FunctionalArrayList extends ArrayList implements FunctionalList {
     /**
@@ -41,6 +41,8 @@ public class FunctionalArrayList extends ArrayList implements FunctionalList {
      * must not change or be affected by changes in the new list.
      *
      * If the list is empty, another empty list is returned.
+     *
+     * @return FunctionalList independent copy.
      */
     public FunctionalList rest() {
         // Get a new instance of FunctionalArrayList
