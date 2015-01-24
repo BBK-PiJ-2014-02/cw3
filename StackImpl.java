@@ -10,7 +10,7 @@
  * object or an error value of the right kind (as defined in {@see
  * ErrorMessage}).
  *
- * @author Vasco Horta
+ * @author VascoHorta
  */
 public class StackImpl extends AbstractStack {
     /**
@@ -23,9 +23,9 @@ public class StackImpl extends AbstractStack {
     }
 
     /**
-     * Pop the last item added and remove it.
+     * Pop the lastest item added and remove it.
      *
-     * @return ReturnObject with the last item added.
+     * @return ReturnObject with the lastest item added.
      */
     public ReturnObject pop() {
         ReturnObject ro = internalList.remove(0);
@@ -33,9 +33,9 @@ public class StackImpl extends AbstractStack {
     }
 
     /**
-     * Returns the last added item without removing it.
+     * Returns the lastest added item without removing it.
      *
-     * @return ReturnObject with last added item.
+     * @return ReturnObject with lastest added item.
      */
     public ReturnObject top() {
         ReturnObject ro = internalList.get(0);
@@ -49,9 +49,12 @@ public class StackImpl extends AbstractStack {
      */
     public void push(Object item) {
         // Add item to position 0
+
+        // When empty, add(item) is required to avoid errors
         if ( internalList.isEmpty() ) {
             internalList.add(item);
         }
+        // For all other cases, add(0,item) for first top position
         else {
             internalList.add(0,item);
         }
