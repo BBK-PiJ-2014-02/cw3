@@ -1,7 +1,7 @@
 /**
  * A sampleable list can be sampled.
  *
- * @author Vasco Horta
+ * @author VascoHorta
  */
 public class SampleableListImpl extends LinkedList implements SampleableList {
     /**
@@ -16,7 +16,7 @@ public class SampleableListImpl extends LinkedList implements SampleableList {
 
         // Add first, third, fifth elements as requested
         for( int i = 0; i < size(); i++ ) {
-            // The first element is element 0
+            // The first element sits on index 0
             if ( i % 2 == 0 ) {
                 ReturnObject ro = get(i);
                 sl.add(ro.getReturnValue());
