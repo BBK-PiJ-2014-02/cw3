@@ -12,7 +12,7 @@
  * object or an error value of the right kind (as defined in {@see
  * ErrorMessage}).
  *
- * @author Vasco Horta
+ * @author VascoHorta
  */
 public class ImprovedStackImpl implements ImprovedStack {
     /**
@@ -35,7 +35,10 @@ public class ImprovedStackImpl implements ImprovedStack {
      * @return a copy of this stack with the items reversed.
      */
     public ImprovedStack reverse() {
-        // Picked LinkedList
+        // To return a copy of the list, a new one needs to be created.
+        // Given that either LinkedList or ArrayList would work equally,
+        // developer chosen at this point LinkedList for performance
+        // reasons.
         ImprovedStack is = new ImprovedStackImpl(new LinkedList());
 
         for( int i = 0; i < size(); i++) {
@@ -61,11 +64,12 @@ public class ImprovedStackImpl implements ImprovedStack {
             // Get the return object for the index i
             ReturnObject ro = list.get(i);
             // Extract the object to be compared
-
             Object item = ro.getReturnValue();
 
             // If equals, remove it and redo that same index
             // since current i will be occupied with the next item
+            // to ensure that no more copies of the same Object
+            // exist in the list.
             if ( item.equals(object) ){
                 list.remove(i);
                 i--;
