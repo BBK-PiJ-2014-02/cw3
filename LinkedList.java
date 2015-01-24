@@ -17,7 +17,7 @@
  * {@see ReturnObject} that will contain either an object or an error
  * value of the right kind (as defined in {@see ErrorMessage}).
  *
- * @author Vasco Horta
+ * @author VascoHorta
  */
 public class LinkedList implements List {
     /**
@@ -90,37 +90,51 @@ public class LinkedList implements List {
      *         encapsulated in a ReturnObject
      */
     public ReturnObject get(int index) {
+		// Please keep in mind that we start from the index value given plus one
+		// and then recursively reduce it until 0 is reach for the wanted element.
+		// The first element is the HEAD where no data is stored.
+
         ReturnObject ro;
 
-        // Validate index only for first time
+        // Validate index only when at the HEAD of the list
         if ( this.first ) {
-            // On first element, no data is stored
-            // Check if list is empty and return appropriate error here
+            // At the HEAD, no data is stored
+            // Check if list is empty and return appropriate error if so
             if( isEmpty() ) {
                 return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
             }
 
+            // Now validate the index.
             ro = checkIndex(index);
-            if ( ro.hasError() && index > size ) {
+
+            // If any error is found, stop here and return it.
+            if ( ro.hasError() ) {
                 return ro;
             }
+
+            // First element is the HEAD, thus virtually index -1, so we bump the given index by one
+            // such that when index given is 0, we start decreasing from 1, and move to the next in list,
+            // ignoring the HEAD element.
+            index++;
         }
 
-        // Index == -1 means that we have the matched index
-        // Please note that index zero is the first element
+        // Recursive index == 0 means that we have the matched index we are interested in.
         // First element from LinkedList is not to be used.
-        if ( index == -1 ) {
+        if ( index == 0 ) {
             ro = new ReturnObjectImpl(this.obj);
         }
-        // Search for next index if it is not null
-        else if ( this.next != null ) {
-            // Decrease index until we get zero: the matched one
-            ro = this.next.get(--index);
-        }
+        // Wanted indexed element is not found yet, i.e.: index == 0, thus continue to next if not null
         else {
-            // Index goes beyond a null next pointer..
-            ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-        }
+            // Decrease index until we reach index 0: the matched one
+            ro = this.next.get(--index);
+
+            // Please note that no checks were made to check if this.next == null
+            // As a developer, we want this class to fatal if at any point the
+            // this.next->get(--index) is attempted on a null this.next.
+            // It is much easier to fix the problem if it fatals here than masking
+            // the problem and make live harder to the next developer.
+            // THUS: check the checkIndex() as it should have captured this
+         }
 
         return ro;
     }
@@ -138,38 +152,43 @@ public class LinkedList implements List {
      *         encapsulated in a ReturnObject
      */
     public ReturnObject remove(int index) {
+
         ReturnObject ro = null;
+
         // Validate index only for first time
         if ( this.first ) {
-            // On first element, no data is stored
+
+            // On first list element = HEAD, no data is stored
             // Check if list is empty and return appropriate error here
             if( isEmpty() ) {
                 return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
             }
+
             // If not empty, check if index is valid
             else {
                 ro = checkIndex(index);
                 if ( ro.hasError() ) return ro;
             }
+
+            // To skip the HEAD, index is reduced by one
+            index--;
+
+            // All checks done, ready to extract the requested item.
+            // Safely decrease the list size.
+            this.size--;
         }
 
         // Check if next element is the one we need to remove
-        if ( index == 0 ) {
-            if ( this.next == null ) {
-                ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-            }
-            else {
-                ro = new ReturnObjectImpl(this.next.obj);
-                this.next = this.next.next;
-            }
+        if ( index == -1 ) {
+            ro = new ReturnObjectImpl(this.next.obj);
+            this.next = this.next.next;
         }
         else {
             ro = this.next.remove(--index);
         }
 
-        if ( first ) {
-            this.size--;
-        }
+        // Many checks for null next elements were skipped to give full trust
+        // on the checkIndex() method instead.
 
         return ro;
     }
@@ -193,54 +212,63 @@ public class LinkedList implements List {
      *         the item added or containing an appropriate error message
      */
     public ReturnObject add(int index, Object item) {
+		// Please keep in mind that we start from the index value given
+		// and then recursively decrease it to 0 on each recursive call.
+		// The first element is the HEAD where no data is stored.
+
         ReturnObject ro;
 
-        // Check if the item is not null. Null is not allowed
-        if ( item == null ) {
-            return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
-        }
-
-        // Validate index only for first time
+        // Validate index only once at the first runing time
         if ( this.first ) {
+
+            // Null items are not allowed to be added
+            if ( item == null ) {
+                return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+            }
+
+            // Ensure we have got a valid index
             ro = checkIndex(index);
             if ( ro.hasError() ) {
                 return ro;
             }
+
+            // All checks passed, confidently increase size,
+            // trusting this item will be added.
+            this.size++;
+
+            // Bump the given index by one to skip the HEAD
+            index++;
         }
 
-        // Add the element on given index
-        // ensuring that the linked chain is not broken.
-        if ( index == -1 ) {
-            // Duplicate this.obj into a newly created item
-            LinkedList newList = new LinkedList(this.obj);
-            // Store the next item in to link to.
-            LinkedList nextList = this.next;
-            // Change this.obj with the current given item
+        // This is the exact index where the new element should go.
+        // - create a new node with this current node's item object
+        // - point new node next element to current node.next element
+        // - add newly supplied item object to current node
+        // - point current node's.next element to the newly created node.
+        if ( index == 0 ) {
+
+            // Create a new node with this current node's item object
+            LinkedList newListNode = new LinkedList(this.obj);
+
+            // Store next node into a new node.
+            LinkedList nextListNode = this.next;
+
+            // Change this.obj to now have the new given item
             this.obj = item;
+
             // Restitch the list
-            this.next = newList;
-            newList.next = nextList;
+            this.next = newListNode;
+            newListNode.next = nextListNode;
+
             // Prepare the response
             ro = new ReturnObjectImpl(item);
         }
+
         // Reaching here, means not yet in position,
         // recursively keep searching while we have next.
-        else if ( this.next != null ) {
+        else {
             ro = this.next.add(--index, item);
         }
-        // Special case when adding the first element
-        else if ( this.next == null && index == 0 ) {
-            // Add the element to the next. Done.
-            this.next = new LinkedList(item);
-            // Prepare the response
-            ro = new ReturnObjectImpl(item);
-        }
-        else {
-            ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-        }
-
-        // Only increase size for first element.
-        if ( first ) this.size++;
 
         return ro;
     }
@@ -257,43 +285,51 @@ public class LinkedList implements List {
      *         the item added or containing an appropriate error message
      */
     public ReturnObject add(Object item) {
+
         ReturnObject ro;
 
-        // If item is null, return immediately withoyt any further action
-        if ( item == null ) {
-            return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
-        }
+        // Apply initial checks once
+        if ( first ) {
+
+            // If item is null, return immediately without any further action
+            if ( item == null ) {
+                return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
+            }
+
+            // All checks done, this element will be added.
+            // Bump up size confidently.
+            this.size++;
+		}
+
         // If the next element in list is null, we have reached the end of the list
         // Append the new item here.
-        else if ( this.next == null ) {
-            this.size++;
+        if ( this.next == null ) {
             this.next = new LinkedList(item);
             ro = new ReturnObjectImpl(item);
         }
         // We have not yet reached the end of the list.
         else {
             ro = this.next.add(item);
-            // Only increment size for first element.
-            if ( first ) this.size++;
         }
 
         return ro;
     }
 
     /**
-     * Returns null if valid or the ReturnObject with the error
+     * Returns NO_ERROR if valid or the ReturnObject with the error
      *
-     * @param index of the list
+     * @param index list required to be checked
      * @return ReturnObject with the error or null if no error
      */
     private ReturnObject checkIndex(int index) {
+
         // Check index out of bounds, i.e.: negative
         if ( index < 0 ) {
             return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
         // Check index out of bounds, i.e.: bigger than or equal to the list size
-        else if ( index >= this.size ) {
+        if ( index >= this.size ) {
             if ( isEmpty() ) {
                 return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
             }
@@ -303,8 +339,6 @@ public class LinkedList implements List {
         }
 
         // When all checks pass, the index is valid.
-        else {
-            return new ReturnObjectImpl(ErrorMessage.NO_ERROR);
-        }
+        return new ReturnObjectImpl(ErrorMessage.NO_ERROR);
     }
 }
