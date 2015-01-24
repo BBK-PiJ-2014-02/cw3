@@ -17,7 +17,7 @@
  * {@see ReturnObject} that will contain either an object or an error
  * value of the right kind (as defined in {@see ErrorMessage}).
  *
- * @author Vasco Horta
+ * @author VascoHorta
  */
 public class ArrayList implements List {
     /**
@@ -26,9 +26,9 @@ public class ArrayList implements List {
     private final int INITIAL_ARRAY_SIZE = 10;
 
     /**
-     * Percentage of increase for the array whenever required to expand it.
+     * Rate of change in percentage for the array to increase of decrease.
      */
-    private final int ARRAY_INCREASE_PERCENTAGE = 10;
+    private final int ARRAY_RATE_OF_CHANGE_PERCENTAGE = 10;
 
     /**
      * The array list
@@ -82,18 +82,14 @@ public class ArrayList implements List {
      *         encapsulated in a ReturnObject
      */
     public ReturnObject get(int index) {
+        // Validate the index
         ReturnObject ro = checkIndex(index);
+
+        // If no errors, an object is to be returned, confidently.
         if ( !ro.hasError() ) {
-            if ( this.array[index] != null && index < size ) {
-                   ro = new ReturnObjectImpl(this.array[index]);
-            }
-            else if ( index >= size && index > 0 ) {
-                ro = new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-            }
-            else {
-                ro = new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
-            }
+            ro = new ReturnObjectImpl(this.array[index]);
         }
+
         return ro;
     }
 
@@ -110,21 +106,16 @@ public class ArrayList implements List {
      *         encapsulated in a ReturnObject
      */
     public ReturnObject remove(int index) {
-        // Check if the index is valid
+        // Validate the index
         ReturnObject ro = checkIndex(index);
 
-        // No error, means valid index
+        // If no errors, an object is to be removed confidently
         if ( !ro.hasError() ) {
 
-            // When trying to remove on empty list
-            if ( isEmpty() ) {
-                return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+            // Resize down the array if too big before removing the new element
+            if ( (this.size + ( this.array.length * ARRAY_RATE_OF_CHANGE_PERCENTAGE / 100 )) < this.array.length ) {
+                reduceArray();
             }
-
-               // Resize down the array if too big before adding the new element
-               if ( (this.size + ( this.array.length * ARRAY_INCREASE_PERCENTAGE / 100 )) < this.array.length ) {
-                   reduceArray();
-               }
 
             // Retrieve the element into a prepared response
             ro = new ReturnObjectImpl(this.array[index]);
@@ -159,20 +150,18 @@ public class ArrayList implements List {
      *         the item added or containing an appropriate error message
      */
     public ReturnObject add(int index, Object item) {
-        // Check if the index is valid
+        // Validate the index
         ReturnObject ro = checkIndex(index);
 
-        // Check if the item is not null. Null is not allowed
+        // Validate the item supplied. Null is not allowed
         if ( item == null ) {
             return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
         }
 
-        // No error, means valid index
+        // If no errors, confidently adds the new item to the required index
         if ( !ro.hasError() ) {
 
-            // Add the element on given index, but first, moving all elements
-            // on given index and subsequent, one index up.
-            // Extend the array if needed before adding the new element
+            // Do we need more space?
             if ( (this.size + 1) >= this.array.length ) {
                 extendArray();
             }
@@ -205,64 +194,57 @@ public class ArrayList implements List {
      *         the item added or containing an appropriate error message
      */
     public ReturnObject add(Object item) {
-        // No null objects allowed
+        // Validate the item supplied. No null objects allowed
         if ( item == null ) {
             return new ReturnObjectImpl(ErrorMessage.INVALID_ARGUMENT);
         }
 
-        // Add the element to the end of the list.
-        else {
-
-            // Extend the array if needed before adding the new element
-            if ( (this.size + 1) >= this.array.length ) {
-                extendArray();
-            }
-
-            // Assign the element to the last available position
-            this.array[size] = item;
-
-            // Update the element amount in the array
-            this.size++;
-
-            // Prepare the response
-            return new ReturnObjectImpl(item);
+        // If no errors, confidently add the new item at the end of the array.
+        // Do we need more space?
+        if ( (this.size + 1) >= this.array.length ) {
+            extendArray();
         }
+
+        // Assign the element to the last available position
+        this.array[size] = item;
+
+        // Update the element amount in the array
+        this.size++;
+
+        // Prepare the response
+        return new ReturnObjectImpl(item);
     }
 
 
     /**
-     * Returns a ReturnObject with the result.
-     *
-     * INDEX_OUT_OF_BOUNDS if negative or <= size
-     * NO_ERROR otherwise.
+     * Checks if the supplied index is valid and returns a
+     * ReturnObject with appropriate error message.
      *
      * @param index of the array
      * @return ReturnObject with the error or null if no error
      */
     private ReturnObject checkIndex(int index) {
+        // NOTE: cannot get(index) or add(index,item) on an empty list.
+        if ( isEmpty() ) {
+            return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
+        }
+
         // Check index out of bounds, i.e.: negative
         if ( index < 0 ) {
             return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
         // Check index out of bounds, i.e.: bigger than or equal to the array size
-        else if ( index >= this.size ) {
-            if ( isEmpty() ) {
-                return new ReturnObjectImpl(ErrorMessage.EMPTY_STRUCTURE);
-            }
-            else {
-                return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-            }
+        if ( index >= this.size ) {
+            return new ReturnObjectImpl(ErrorMessage.INDEX_OUT_OF_BOUNDS);
         }
 
         // When all checks pass, the index is valid.
-        else {
-            return new ReturnObjectImpl(ErrorMessage.NO_ERROR);
-        }
+        return new ReturnObjectImpl(ErrorMessage.NO_ERROR);
     }
 
     /**
-     * Extending the array to accomodate more elements.
+     * Extends the array to accomodate more elements.
      * The amount of the extension is calculated by ARRAY_INCREASE_PERCENTAGE.
      */
     private void extendArray() {
@@ -270,10 +252,10 @@ public class ArrayList implements List {
         int currentSize = this.array.length;
 
         // Percentage to add to current size
-        int addingSize  = ( currentSize * ARRAY_INCREASE_PERCENTAGE / 100 );
+        int addingSize = ( currentSize * ARRAY_RATE_OF_CHANGE_PERCENTAGE / 100 );
 
-        // The array's new size
-        int newSize     = currentSize + addingSize;
+        // The new array size
+        int newSize = currentSize + addingSize;
 
         // Create the new Object array with the new size
         Object[] copy = new Object[newSize];
@@ -296,7 +278,7 @@ public class ArrayList implements List {
         int currentSize = this.array.length;
 
         // Percentage to cut to current size
-        int reducingSize  = ( currentSize * ARRAY_INCREASE_PERCENTAGE / 100 );
+        int reducingSize  = ( currentSize * ARRAY_RATE_OF_CHANGE_PERCENTAGE / 100 );
 
         // The array's new size
         int newSize     = currentSize - reducingSize;
@@ -318,7 +300,7 @@ public class ArrayList implements List {
      */
     private void shiftUp(int index) {
         // Make sure there is still enough space in the array to add more elements.
-        if ( this.array.length < this.size + (this.array.length * ARRAY_INCREASE_PERCENTAGE / 100) ) {
+        if ( this.array.length < this.size + (this.array.length * ARRAY_RATE_OF_CHANGE_PERCENTAGE / 100) ) {
             extendArray();
         }
 
