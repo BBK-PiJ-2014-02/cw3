@@ -42,7 +42,7 @@ public class FunctionalArrayList extends ArrayList implements FunctionalList {
      *
      * If the list is empty, another empty list is returned.
      *
-     * @return FunctionalList independent copy.
+     * @return FunctionalList independent copy without head
      */
     public FunctionalList rest() {
         // Get a new instance of FunctionalArrayList
