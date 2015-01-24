@@ -2,16 +2,16 @@
  * A wrapper containing either an object (the result of an operation
  * on a data structure) or an error value.
  *
- * @author Vasco Horta
+ * @author VascoHorta
  */
 public class ReturnObjectImpl implements ReturnObject {
     /**
-     * The error message to be returned
+     * The final error message to be returned
      */
     private final ErrorMessage error;
 
     /**
-     * The wrapped Object response.
+     * The final wrapped Object response.
      */
     private final Object obj;
 
